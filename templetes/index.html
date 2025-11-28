@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recherche Personnages Dragon Ball</title>
+</head>
+<body>
+    <h1>Recherche des Personnages Dragon Ball</h1>
+
+    <form action="/search" method="GET">
+        
+        <label>Nom :</label>
+        <input type="text" name="name" placeholder="Goku, Vegeta, etc.">
+
+        <label>Race :</label>
+        <select name="race">
+            <option value="">-- Toutes --</option>
+            <option value="Saiyan">Saiyan</option>
+            <option value="Saiyan/Humain">Saiyan/Humain</option>
+            <option value="Humain">Humain</option>
+            <option value="Namek">Namek</option>
+            <option value="Démon">Démon</option>
+            <option value="Alien">Alien</option>
+            <option value="Bio-Android">Bio-Android</option>
+        </select>
+
+        <label>Affiliation :</label>
+        <select name="affiliation">
+            <option value="">-- Toutes --</option>
+            <option value="Z-Fighters">Z-Fighters</option>
+            <option value="Armée de Freezer">Armée de Freezer</option>
+            <option value="Armée du Ruban Rouge (RR)">Armée du Ruban Rouge (RR)</option>
+            <option value="Aucun">Aucun</option>
+        </select>
+
+        <label>Année d’apparition :</label>
+        <input type="number" name="year" placeholder="ex: 1984">
+
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <p>Les résultats apparaissent en JSON.</p>
+
+</body>
+</html>
