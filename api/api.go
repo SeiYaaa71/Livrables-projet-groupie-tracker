@@ -1,4 +1,4 @@
-package Api
+package main
 
 import (
     "encoding/json"
@@ -7,29 +7,28 @@ import (
     "net/http"
 )
 
+// Structure correspondant à la réponse JSON de l'API
 type ApiData struct {
-    Results []interface{} `json:"data"`
+    Items []interface{} `json:"items"` // L’API renvoie "items", pas "data"
 }
 
 func main() {
-    // URL de l'API
-    urlApi := "https://api.pokemontcg.io/v2/cards" // L'API nécessite un endpoint valide
 
-    // Création de la requête HTTP
+    // ⚠️ L’endpoint racine ne renvoie pas de données utiles.
+    // Utilise plutôt /api/characters pour obtenir des résultats.
+    urlApi := "https://dragonball-api.com/api/characters"
+
+    // Création de la requête
     req, errReq := http.NewRequest(http.MethodGet, urlApi, nil)
     if errReq != nil {
-        fmt.Println("Oupss, une erreur est survenue :", errReq.Error())
+        fmt.Println("Erreur création requête :", errReq.Error())
         return
     }
 
-    // Ajout d’un User-Agent
-    req.Header.Add("X-Api-Key", "d2804cc0-062f-47ad-9b3d-41780ba2b8f6")
-
-    // Exécution de la requête HTTP
-    client := &http.Client{} // <-- correction ici
+    client := &http.Client{}
     res, errResp := client.Do(req)
     if errResp != nil {
-        fmt.Println("Oupss, une erreur est survenue :", errResp.Error())
+        fmt.Println("Erreur lors de l'appel API :", errResp.Error())
         return
     }
     defer res.Body.Close()
@@ -37,26 +36,25 @@ func main() {
     // Lecture du corps de la réponse
     body, errBody := io.ReadAll(res.Body)
     if errBody != nil {
-        fmt.Println("Oupss, une erreur est survenue :", errBody.Error())
+        fmt.Println("Erreur lecture body :", errBody.Error())
         return
     }
 
-    // Variable qui va contenir les données
+    fmt.Println("Réponse brute :")
+    fmt.Println(string(body))
+
+    // Décodage JSON
     var decodeData ApiData
 
-	fmt.Println("Réponse brute :")
-	fmt.Println(string(body))
-
-    // Décodage du JSON
     errJson := json.Unmarshal(body, &decodeData)
     if errJson != nil {
         fmt.Println("Erreur lors du décodage JSON :", errJson.Error())
         return
     }
 
-    // Affichage des données
-    if len(decodeData.Results) > 0 {
-        fmt.Println(decodeData.Results[0])
+    // Affichage du premier élément
+    if len(decodeData.Items) > 0 {
+        fmt.Println("Premier élément :", decodeData.Items[0])
     } else {
         fmt.Println("Aucun résultat trouvé")
     }
