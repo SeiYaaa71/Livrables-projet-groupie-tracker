@@ -1,6 +1,7 @@
 package controller
 
 import (
+	Api "Livrable-projet-groupie-tracker/api"
 	"encoding/json"
 	"html/template"
 	"net/http"
@@ -33,6 +34,12 @@ var characterDB = []Character{
 
 var favoritesFile = "favorites.json"
 
+//fonction pour charger les pages html
+func renderTemplate(w http.ResponseWriter, filename string, data interface{}) {
+	tmpl := template.Must(template.ParseFiles("template/" + filename))
+	tmpl.Execute(w, data)
+}
+
 // Charger favoris depuis JSON
 func loadFavorites() []int {
 	data, err := os.ReadFile(favoritesFile)
@@ -55,6 +62,9 @@ func saveFavorites(fav []int) {
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, _ := template.ParseFiles("templetes/index.html")
 	tmpl.Execute(w, nil)
+	Api.ApiGet("characters")
+	data := Api.Data
+	renderTemplate(w, "index.html", data)
 }
 
 // Recherche + filtres + pagination
