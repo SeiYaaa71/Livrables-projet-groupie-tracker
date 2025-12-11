@@ -2,16 +2,32 @@ package router
 
 import (
 	"Livrable-projet-groupie-tracker/controller"
-	"github.com/gorilla/mux"
+	"html/template"
+	"net/http"
 )
 
-func SetupRouter() *mux.Router {
-	r := mux.NewRouter()
+func SetupRouter() http.Handler {
 
-	r.HandleFunc("/", controller.HomeHandler).Methods("GET")
-	r.HandleFunc("/search", controller.SearchHandler).Methods("GET")
-	r.HandleFunc("/favorite/add", controller.AddFavoriteHandler).Methods("POST")
-	r.HandleFunc("/favorite/remove", controller.RemoveFavoriteHandler).Methods("POST")
+	// ----- Gestion du CSS -----
+	fs := http.FileServer(http.Dir("./style"))
+	http.Handle("/style/", http.StripPrefix("/style/", fs))
 
-	return r
+	// ----- Template -----
+	tmpl := template.Must(template.ParseFiles("templetes/index.html"))
+
+	// ----- Routes -----
+
+	// Page d'accueil
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		tmpl.Execute(w, nil)
+	})
+
+	// Recherche
+	http.HandleFunc("/search", controller.SearchHandler)
+
+	// Favoris
+	http.HandleFunc("/favorite/add", controller.AddFavoriteHandler)
+	http.HandleFunc("/favorite/remove", controller.RemoveFavoriteHandler)
+
+	return http.DefaultServeMux
 }
