@@ -1,44 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Recherche Personnages Dragon Ball</title>
+    <meta charset="UTF-8">
+    <title>Accueil - Dragon Ball Search</title>
+    <link rel="stylesheet" href="/style/style.css"> 
 </head>
-<body>
-    <h1>Recherche des Personnages Dragon Ball</h1>
+<body> 
+    
+    <header>
+        <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
+    </header>
 
-    <form action="/search" method="GET">
+    <main class="homepage-splash">
+        <h2>Découvrez les Guerriers de l'Univers</h2>
+        <p>
+            Plongez dans les données de tous les personnages, races et sagas de l'univers Dragon Ball. Choisissez votre mode de combat.
+        </p>
         
-        <label>Nom :</label>
-        <input type="text" name="name" placeholder="Goku, Vegeta, etc.">
+        <div style="display: flex; gap: 20px;">
+            <a href="/search" class="btn btn-large">
+                ACCÉDER (Style Classique)
+            </a>
 
-        <label>Race :</label>
-        <select name="race">
-            <option value="">-- Toutes --</option>
-            <option value="Saiyan">Saiyan</option>
-            <option value="Saiyan/Humain">Saiyan/Humain</option>
-            <option value="Humain">Humain</option>
-            <option value="Namek">Namek</option>
-            <option value="Démon">Démon</option>
-            <option value="Alien">Alien</option>
-            <option value="Bio-Android">Bio-Android</option>
-        </select>
+            <a href="/search?theme=ui" class="btn btn-large" style="
+                background: linear-gradient(135deg, var(--color-ui-primary), var(--color-ui-secondary));
+                color: var(--color-ui-bg);
+            ">
+                MODE ULTRA INSTINCT
+            </a>
+        </div>
 
-        <label>Affiliation :</label>
-        <select name="affiliation">
-            <option value="">-- Toutes --</option>
-            <option value="Z-Fighters">Z-Fighters</option>
-            <option value="Armée de Freezer">Armée de Freezer</option>
-            <option value="Armée du Ruban Rouge (RR)">Armée du Ruban Rouge (RR)</option>
-            <option value="Aucun">Aucun</option>
-        </select>
+    </main>
 
-        <label>Année d’apparition :</label>
-        <input type="number" name="year" placeholder="ex: 1984">
-
-        <button type="submit">Rechercher</button>
-    </form>
-
-    <p>Les résultats apparaissent en JSON.</p>
-
+    <footer>
+        <small>Dragon Ball API Search V2.0 - 2025</small>
+    </footer>
 </body>
 </html>

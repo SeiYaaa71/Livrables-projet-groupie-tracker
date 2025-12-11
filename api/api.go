@@ -5,6 +5,7 @@ import (
     "fmt"
     "io"
     "net/http"
+	
 )
 
 // Structure correspondant à la réponse JSON de l'API
