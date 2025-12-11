@@ -1,67 +1,63 @@
-package api
+package Api
 
 import (
-	"encoding/base64"
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"os"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
 )
 
-var baseURL = "https://web.dragonball-api.com"
-
-// Récupération du Client ID
-func getClientID() string {
-	id := os.Getenv("API_CLIENT_ID")
-	if id == "" {
-		fmt.Println("⚠️  API_CLIENT_ID est vide !")
-	}
-	return id
+type ApiData struct {
+    Results []interface{} `json:"data"`
 }
 
-// Récupération du Client Secret
-func getClientSecret() string {
-	secret := os.Getenv("API_CLIENT_SECRET")
-	if secret == "" {
-		fmt.Println("⚠️  API_CLIENT_SECRET est vide !")
-	}
-	return secret
-}
+func main() {
+    // URL de l'API
+    urlApi := "https://api.pokemontcg.io/v2/cards" // L'API nécessite un endpoint valide
 
-// Génération du header "Authorization: Basic "
-func getBasicAuthHeader() string {
-	id := getClientID()
-	secret := getClientSecret()
+    // Création de la requête HTTP
+    req, errReq := http.NewRequest(http.MethodGet, urlApi, nil)
+    if errReq != nil {
+        fmt.Println("Oupss, une erreur est survenue :", errReq.Error())
+        return
+    }
 
-	token := id + ":" + secret
-	encoded := base64.StdEncoding.EncodeToString([]byte(token))
+    // Ajout d’un User-Agent
+    req.Header.Add("X-Api-Key", "d2804cc0-062f-47ad-9b3d-41780ba2b8f6")
 
-	return "Basic " + encoded
-}
+    // Exécution de la requête HTTP
+    client := &http.Client{} // <-- correction ici
+    res, errResp := client.Do(req)
+    if errResp != nil {
+        fmt.Println("Oupss, une erreur est survenue :", errResp.Error())
+        return
+    }
+    defer res.Body.Close()
 
-// Fonction générique d'appel API
-func CallAPI(endpoint string) ([]byte, error) {
-	url := baseURL + endpoint
+    // Lecture du corps de la réponse
+    body, errBody := io.ReadAll(res.Body)
+    if errBody != nil {
+        fmt.Println("Oupss, une erreur est survenue :", errBody.Error())
+        return
+    }
 
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
+    // Variable qui va contenir les données
+    var decodeData ApiData
 
-	// Ajout de l'authentification Basic (Client ID + Secret)
-	req.Header.Set("Authorization", getBasicAuthHeader())
+	fmt.Println("Réponse brute :")
+	fmt.Println(string(body))
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
+    // Décodage du JSON
+    errJson := json.Unmarshal(body, &decodeData)
+    if errJson != nil {
+        fmt.Println("Erreur lors du décodage JSON :", errJson.Error())
+        return
+    }
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return body, nil
+    // Affichage des données
+    if len(decodeData.Results) > 0 {
+        fmt.Println(decodeData.Results[0])
+    } else {
+        fmt.Println("Aucun résultat trouvé")
+    }
 }

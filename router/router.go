@@ -1,8 +1,7 @@
 package router
 
 import (
-	"net/http"
-	"dbzapp/controller"
+	"Livrable-projet-groupie-tracker/controller"
 	"github.com/gorilla/mux"
 )
 

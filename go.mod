@@ -1,3 +1,5 @@
-module main.go
+module Livrable-projet-groupie-tracker
 
-go 1.24.1
+go 1.25.1
+
+require github.com/gorilla/mux v1.8.1
