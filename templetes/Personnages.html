@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="CharacterSheets"></div>
+    {{range .Items}}
+        
+    
+        {{if .Image}}
+            <img src="{{ (index .Image 0).Url }}" alt="image de {{.NomAlb}}">
+        {{end}}
+
+        <h3>{{.Name}}</h3>
+        <div class="Description">
+            <p>Race : {{.Race}}</p>
+            <p>Affiliation : {{.Affiliation}}</p>
+        </div>
+
+    {{end}}
+</body>
+</html>
