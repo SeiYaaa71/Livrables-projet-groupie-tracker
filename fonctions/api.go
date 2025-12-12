@@ -1,10 +1,11 @@
-package Api
+package fonction
 
 import (
     "encoding/json"
     "fmt"
     "io"
     "net/http"
+    "strings"
 	
 )
 
@@ -41,12 +42,26 @@ var DecodeChar characters
 var DecodePlan planets
 
 
-func ApiGet(Url string) {
+var Filters = [][]string{
+    //races filters
+    {"race", "Human", "Saiyan", "Namekian", "Majin", "Frieza Race", "Android", "Jiren Race", "God", "Angel", "Evil", "Nucleico", "Nucleico benigno", "Unknown"},
 
-    urlApi := "https://dragonball-api.com/api/" + Url
+    //affiliation
+    {"affiliation", "Z Fighter", "Red Ribbon Army", "Namekian Warrior", "Freelancer", "Army of Frieza", "Pride Troopers", "Assistant of Vermoud", "God", "Assistant of Beerus", "Villain", "Other"},
+
+}
+
+func ApiGet(Url string, filters []string) {
+
+    UrlApi := "https://dragonball-api.com/api/"
+
+    if len(filters) > 0 {
+        UrlApi += "?" + strings.Join(filters, "&")
+    } 
+
 
     // Création de la requête
-    req, errReq := http.NewRequest(http.MethodGet, urlApi, nil)
+    req, errReq := http.NewRequest(http.MethodGet, UrlApi, nil)
     if errReq != nil {
         fmt.Println("Erreur création requête :", errReq.Error())
         return

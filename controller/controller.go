@@ -1,7 +1,7 @@
 package controller
 
 import (
-	Api "Livrable-projet-groupie-tracker/api"
+	"Livrable-projet-groupie-tracker/fonctions"
 	"encoding/json"
 	"html/template"
 	"net/http"
@@ -62,9 +62,18 @@ func saveFavorites(fav []int) {
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, _ := template.ParseFiles("templetes/index.html")
 	tmpl.Execute(w, nil)
-	Api.ApiGet("characters")
-	data := Api.Data
+	fonction.ApiGet("characters", []string{})
+	data := fonction.Data
 	renderTemplate(w, "index.html", data)
+}
+
+func FilterPage(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("templetes/search.html")
+	tmpl.Execute(w, nil)
+	var detail string = "characters/1"
+	fonction.ApiGet(detail, []string{})
+	data := " "
+	renderTemplate(w, "search.html", data)
 }
 
 // Recherche + filtres + pagination
