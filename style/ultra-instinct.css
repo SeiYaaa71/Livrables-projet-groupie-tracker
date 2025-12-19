@@ -1,0 +1,40 @@
+:root {
+  --color-ui-bg: #121212;
+  --color-ui-surface: #1e1e1e;
+  --color-ui-primary: #00bcd4;
+  --color-ui-secondary: #00838f;
+}
+
+@keyframes ui-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 188, 212, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(0, 188, 212, 0.7); }
+}
+
+.ui-theme {
+  background-color: var(--color-ui-bg) !important;
+  color: #e0e0e0 !important;
+}
+
+.ui-theme header {
+  background-color: var(--color-ui-surface);
+  border-bottom: 2px solid var(--color-ui-primary);
+  animation: ui-pulse 4s infinite ease-in-out;
+}
+
+.ui-theme header h1 { color: var(--color-ui-primary); }
+
+.ui-theme .container {
+  background-color: var(--color-ui-surface);
+  border: 1px solid var(--color-ui-border);
+}
+
+.ui-theme .btn {
+  background: linear-gradient(90deg, var(--color-ui-primary), var(--color-ui-secondary));
+}
+
+.ui-theme .character-card {
+  background: var(--color-ui-surface);
+  border-color: var(--color-ui-primary);
+}
+
+.ui-theme .card-content { background: #121212; }

@@ -1,0 +1,25 @@
+:root {
+  --color-primary-db: #e77e23;
+  --color-secondary-db: #1e88e5;
+  --color-background-light: #f4f6f9;
+  --color-text-dark: #333333;
+  --color-text-medium: #666666;
+  --color-card-background: #ffffff;
+  --color-border-subtle: #e0e0e0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', 'Arial', sans-serif;
+}
+
+body {
+  background-color: var(--color-background-light);
+  color: var(--color-text-dark);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

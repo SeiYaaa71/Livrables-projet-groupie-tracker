@@ -2,28 +2,44 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/style/style.css">
-    <title>Dashboard - Dragon Ball</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/main.css">
+<link rel="stylesheet" href="/style/layout.css">
+<link rel="stylesheet" href="/style/components.css">
+
+<link rel="stylesheet" href="/style/ultra-instinct.css">
+    <title>Dashboard - Dragon Ball Encyclopedia</title>
 </head>
 <body class="{{.ThemeClass}}">
-    <nav style="padding: 10px; display: flex; gap: 10px; background: rgba(0,0,0,0.05);">
-        <a href="/dashboard" class="btn btn-small">Encyclopédie</a>
-        <a href="/options" class="btn btn-small">Options</a>
-    </nav>
 
-    <header>
+    <header class="main-header">
+        <div class="header-spacer"></div>
+        
         <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
+        
+        <nav class="top-nav">
+            <a href="/search{{.ThemeParam}}" class="btn btn-small">Encyclopédie</a>
+            <a href="/options{{.ThemeParam}}" class="btn btn-small">Options</a>
+        </nav>
     </header>
 
     <main class="homepage-splash">
         <div class="container" style="max-width: 500px;">
             <form action="/search" method="GET">
-                {{if .ThemeClass}}<input type="hidden" name="theme" value="ui">{{end}}
+                {{if eq .ThemeClass "ui-theme"}}
+                    <input type="hidden" name="theme" value="ui">
+                {{end}}
+                
                 <label for="name">Entrez un nom de personnage :</label>
-                <input type="text" id="name" name="name" placeholder="Ex: Goku..." style="margin-top:10px;">
-                <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">RECHERCHER</button>
+                <input type="text" id="name" name="name" placeholder="Ex: Goku, Vegeta..." style="margin-top:10px;" required>
+                
+                <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">RECHERCHER</button>
             </form>
         </div>
     </main>
+
+    <footer>
+        <small>Dragon Ball API Search V2.0 - 2025</small>
+    </footer>
 </body>
 </html>

@@ -30,21 +30,26 @@ func loadFavorites() []int {
 	return fav
 }
 
-// DashboardHandler affiche la page avec les petits boutons et la barre de recherche
 func DashboardHandler(w http.ResponseWriter, r *http.Request) {
-    theme := r.URL.Query().Get("theme")
-    data := struct_.SearchPageData{ThemeClass: ""}
+	theme := r.URL.Query().Get("theme")
+	
+	// Utilisation de struct_.SearchPageData
+	data := struct_.SearchPageData{
+		ThemeClass: "",
+		ThemeParam: "",
+	}
 
-    if theme == "ui" {
-        data.ThemeClass = "ui-theme"
-    }
+	if theme == "ui" {
+		data.ThemeClass = "ui-theme"
+		data.ThemeParam = "?theme=ui"
+	}
 
-    tmpl, err := template.ParseFiles("templetes/dashboard.html")
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
-    tmpl.Execute(w, data)
+	tmpl, err := template.ParseFiles("templetes/dashboard.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	tmpl.Execute(w, data)
 }
 
 // Sauvegarder favoris
