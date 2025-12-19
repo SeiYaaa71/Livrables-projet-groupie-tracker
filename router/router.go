@@ -24,6 +24,7 @@ func SetupRouter() http.Handler {
 
 	// Recherche
 	http.HandleFunc("/search", controller.SearchHandler)
+	http.HandleFunc("/dashboard", controller.DashboardHandler)
 
 	// Favoris
 	http.HandleFunc("/favorite/add", controller.AddFavoriteHandler)

@@ -133,6 +133,23 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
+// DashboardHandler affiche la page avec les petits boutons et la barre de recherche
+func DashboardHandler(w http.ResponseWriter, r *http.Request) {
+    theme := r.URL.Query().Get("theme")
+    data := SearchHandler{ThemeClass: ""}
+    
+    if theme == "ui" {
+        data.ThemeClass = "ui-theme"
+    }
+
+    tmpl, err := template.ParseFiles("templetes/dashboard.html")
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    tmpl.Execute(w, data)
+}
+
 // Ajouter un favori
 func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Query().Get("id")
