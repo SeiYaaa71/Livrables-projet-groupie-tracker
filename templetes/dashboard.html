@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style/style.css">
+    <title>Dashboard - Dragon Ball</title>
+</head>
+<body class="{{.ThemeClass}}">
+    <nav style="padding: 10px; display: flex; gap: 10px; background: rgba(0,0,0,0.05);">
+        <a href="/dashboard" class="btn btn-small">Encyclopédie</a>
+        <a href="/options" class="btn btn-small">Options</a>
+    </nav>
+
+    <header>
+        <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
+    </header>
+
+    <main class="homepage-splash">
+        <div class="container" style="max-width: 500px;">
+            <form action="/search" method="GET">
+                {{if .ThemeClass}}<input type="hidden" name="theme" value="ui">{{end}}
+                <label for="name">Entrez un nom de personnage :</label>
+                <input type="text" id="name" name="name" placeholder="Ex: Goku..." style="margin-top:10px;">
+                <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">RECHERCHER</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
