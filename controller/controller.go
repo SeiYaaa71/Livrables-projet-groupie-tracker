@@ -4,33 +4,11 @@ import (
 	"Livrable-projet-groupie-tracker/fonctions"
 	"encoding/json"
 	"html/template"
+	struct_ "Livrable-projet-groupie-tracker/struct"
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 )
-
-type Character struct {
-	ID         int
-	Name       string
-	Race       string
-	Affiliation string
-	FirstYear  int
-}
-
-var characterDB = []Character{
-	{1, "Goku", "Saiyan", "Z-Fighters", 1984},
-	{2, "Vegeta", "Saiyan", "Z-Fighters", 1988},
-	{3, "Gohan", "Saiyan/Humain", "Z-Fighters", 1989},
-	{4, "Piccolo", "Namek", "Z-Fighters", 1984},
-	{5, "Freezer", "Alien", "Armée de Freezer", 1989},
-	{6, "Cell", "Bio-Android", "Armée du Ruban Rouge (RR)", 1992},
-	{7, "Majin Boo", "Démon", "Aucun", 1994},
-	{8, "Trunks", "Saiyan/Humain", "Z-Fighters", 1991},
-	{9, "Bulma", "Humain", "Z-Fighters", 1984},
-	{10, "Krillin", "Humain", "Z-Fighters", 1984},
-	// Tu peux en ajouter autant que tu veux
-}
 
 var favoritesFile = "favorites.json"
 
@@ -50,6 +28,23 @@ func loadFavorites() []int {
 	var fav []int
 	json.Unmarshal(data, &fav)
 	return fav
+}
+
+// DashboardHandler affiche la page avec les petits boutons et la barre de recherche
+func DashboardHandler(w http.ResponseWriter, r *http.Request) {
+    theme := r.URL.Query().Get("theme")
+    data := struct_.SearchPageData{ThemeClass: ""}
+
+    if theme == "ui" {
+        data.ThemeClass = "ui-theme"
+    }
+
+    tmpl, err := template.ParseFiles("templetes/dashboard.html")
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    tmpl.Execute(w, data)
 }
 
 // Sauvegarder favoris
@@ -78,10 +73,6 @@ func FilterPage(w http.ResponseWriter, r *http.Request) {
 
 // Recherche + filtres + pagination
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	race := r.URL.Query().Get("race")
-	affiliation := r.URL.Query().Get("affiliation")
-	year := r.URL.Query().Get("year")
 
 	pageStr := r.URL.Query().Get("page")
 	page, _ := strconv.Atoi(pageStr)
@@ -89,31 +80,8 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		page = 1
 	}
 
-	results := []Character{}
+	results := []struct_.Characters{}
 
-	for _, c := range characterDB {
-
-		if name != "" && !strings.Contains(strings.ToLower(c.Name), strings.ToLower(name)) {
-			continue
-		}
-
-		if race != "" && c.Race != race {
-			continue
-		}
-
-		if affiliation != "" && c.Affiliation != affiliation {
-			continue
-		}
-
-		if year != "" {
-			y, _ := strconv.Atoi(year)
-			if c.FirstYear != y {
-				continue
-			}
-		}
-
-		results = append(results, c)
-	}
 
 	// Pagination par 10
 	start := (page - 1) * 10
@@ -131,23 +99,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	response, _ := json.Marshal(paged)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(response)
-}
-
-// DashboardHandler affiche la page avec les petits boutons et la barre de recherche
-func DashboardHandler(w http.ResponseWriter, r *http.Request) {
-    theme := r.URL.Query().Get("theme")
-    data := SearchHandler{ThemeClass: ""}
-    
-    if theme == "ui" {
-        data.ThemeClass = "ui-theme"
-    }
-
-    tmpl, err := template.ParseFiles("templetes/dashboard.html")
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
-    tmpl.Execute(w, data)
 }
 
 // Ajouter un favori
