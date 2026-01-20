@@ -1,34 +1,14 @@
 package router
 
 import (
-	"Livrable-projet-groupie-tracker/controller"
-	"html/template"
+	controller "Livrable-projet-groupie-tracker/controller"
 	"net/http"
 )
 
-func SetupRouter() http.Handler {
+func New() *http.ServeMux {
+	mux := http.NewServeMux()
 
-	// ----- Gestion du CSS -----
-	fs := http.FileServer(http.Dir("./style"))
-	http.Handle("/style/", http.StripPrefix("/style/", fs))
+	mux.HandleFunc("/", controller.SearchHandler)
 
-	// ----- Template -----
-	tmpl := template.Must(template.ParseFiles("templetes/index.html"))
-
-	// ----- Routes -----
-
-	// Page d'accueil
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.Execute(w, nil)
-	})
-
-	// Recherche
-	http.HandleFunc("/search", controller.SearchHandler)
-	http.HandleFunc("/dashboard", controller.DashboardHandler)
-
-	// Favoris
-	http.HandleFunc("/favorite/add", controller.AddFavoriteHandler)
-	http.HandleFunc("/favorite/remove", controller.RemoveFavoriteHandler)
-
-	return http.DefaultServeMux
+	return mux
 }

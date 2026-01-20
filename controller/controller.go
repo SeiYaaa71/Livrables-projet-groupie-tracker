@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"Livrable-projet-groupie-tracker/fonctions"
+	fonction "Livrable-projet-groupie-tracker/fonctions"
+	struct_ "Livrable-projet-groupie-tracker/struct"
 	"encoding/json"
 	"html/template"
-	struct_ "Livrable-projet-groupie-tracker/struct"
 	"net/http"
 	"os"
 	"strconv"
@@ -12,7 +12,7 @@ import (
 
 var favoritesFile = "favorites.json"
 
-//fonction pour charger les pages html
+// fonction pour charger les pages html
 func renderTemplate(w http.ResponseWriter, filename string, data interface{}) {
 	tmpl := template.Must(template.ParseFiles("template/" + filename))
 	tmpl.Execute(w, data)
@@ -32,7 +32,7 @@ func loadFavorites() []int {
 
 func DashboardHandler(w http.ResponseWriter, r *http.Request) {
 	theme := r.URL.Query().Get("theme")
-	
+
 	// Utilisation de struct_.SearchPageData
 	data := struct_.SearchPageData{
 		ThemeClass: "",
@@ -44,7 +44,7 @@ func DashboardHandler(w http.ResponseWriter, r *http.Request) {
 		data.ThemeParam = "?theme=ui"
 	}
 
-	tmpl, err := template.ParseFiles("templetes/dashboard.html")
+	tmpl, err := template.ParseFiles("templates/dashboard.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -60,7 +60,7 @@ func saveFavorites(fav []int) {
 
 // Page d’accueil
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, _ := template.ParseFiles("templetes/index.html")
+	tmpl, _ := template.ParseFiles("templates/index.html")
 	tmpl.Execute(w, nil)
 	fonction.ApiGet("characters", []string{})
 	data := fonction.Data
@@ -68,7 +68,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func FilterPage(w http.ResponseWriter, r *http.Request) {
-	tmpl, _ := template.ParseFiles("templetes/search.html")
+	tmpl, _ := template.ParseFiles("templates/search.html")
 	tmpl.Execute(w, nil)
 	var detail string = "characters/1"
 	fonction.ApiGet(detail, []string{})
@@ -78,32 +78,18 @@ func FilterPage(w http.ResponseWriter, r *http.Request) {
 
 // Recherche + filtres + pagination
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
+	data := make(map[string]interface{})
+	if r.Method == http.MethodGet {
+		Id := r.FormValue("id")
 
-	pageStr := r.URL.Query().Get("page")
-	page, _ := strconv.Atoi(pageStr)
-	if page < 1 {
-		page = 1
+		if Id != " " {
+			fonction.ApiGet("characters/"+Id, []string{})
+			data["character"] = fonction.Data
+		}
 	}
+	data["Characters"] = nil
+	renderTemplate(w, "RealSearch.html", data)
 
-	results := []struct_.Characters{}
-
-
-	// Pagination par 10
-	start := (page - 1) * 10
-	end := start + 10
-
-	if start > len(results) {
-		start = len(results)
-	}
-	if end > len(results) {
-		end = len(results)
-	}
-
-	paged := results[start:end]
-
-	response, _ := json.Marshal(paged)
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(response)
 }
 
 // Ajouter un favori

@@ -1,22 +1,43 @@
 package struct_
 
+type CharactersByName struct {
+}
+
 // Character définit un personnage unique avec les champs de ton API
-type Character struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Ki          string `json:"ki"`
-	MaxKi       string `json:"maxKi"`
-	Race        string `json:"race"`
-	Gender      string `json:"gender"`
-	Description string `json:"description"`
-	Image       string `json:"image"`
-	Affiliation string `json:"affiliation"`
+
+type CharacterById struct {
+	ID          int     `json:"id"`
+	Name        string  `json:"name"`
+	Ki          string  `json:"ki"`
+	MaxKi       string  `json:"maxKi"`
+	Race        string  `json:"race"`
+	Gender      string  `json:"gender"`
+	Description string  `json:"description"`
+	Image       string  `json:"image"`
+	Affiliation string  `json:"affiliation"`
 	DeletedAt   *string `json:"deletedAt"`
+
+	OriginPlanet struct {
+		ID          int     `json:"id"`
+		Name        string  `json:"name"`
+		IsDestroyed bool    `json:"isDestroyed"`
+		Description string  `json:"description"`
+		Image       string  `json:"image"`
+		DeletedAt   *string `json:"deletedAt"`
+	} `json:"originPlanet"`
+
+	Transformations []struct {
+		ID        int     `json:"id"`
+		Name      string  `json:"name"`
+		Image     string  `json:"image"`
+		Ki        string  `json:"ki"`
+		DeletedAt *string `json:"deletedAt"`
+	} `json:"transformations"`
 }
 
 // Characters est la structure de retour de l'API pour une liste
 type Characters struct {
-	Items []Character `json:"items"`
+	Items []CharacterById `json:"items"`
 }
 
 type Planets struct {
@@ -33,7 +54,7 @@ type Planets struct {
 type SearchPageData struct {
 	ThemeClass string
 	ThemeParam string
-	Results    []Character // Réfère maintenant à la structure définie plus haut
+	Results    []Characters // Réfère maintenant à la structure définie plus haut
 }
 
 var Filters = [][]string{
