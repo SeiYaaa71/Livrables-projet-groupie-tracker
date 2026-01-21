@@ -13,8 +13,10 @@ func New() *http.ServeMux {
 	mux.HandleFunc("/search", controller.SearchHandler)
 	mux.HandleFunc("/dashboard", controller.DashboardHandler)
 	mux.HandleFunc("/characters", controller.CharactersHandler)
+	mux.HandleFunc("/favorites/add", controller.AddFavoriteHandler)
+	mux.HandleFunc("/favorites/remove", controller.RemoveFavoriteHandler)
 
-	// Fichiers statiques (CSS)
+	// Statics
 	fileServer := http.FileServer(http.Dir("./style"))
 	mux.Handle("/style/", http.StripPrefix("/style/", fileServer))
 

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/style/search.css">
+  <title>{{ .Character.Name }}</title>
+</head>
+<body>
+  <a href="/search">⬅ Retour</a>
+
+  <h1>{{ .Character.Name }}</h1>
+  <img src="{{ .Character.Image }}" alt="{{ .Character.Name }}" width="250">
+
+  <p><strong>Race :</strong> {{ .Character.Race }}</p>
+  <p><strong>Genre :</strong> {{ .Character.Gender }}</p>
+  <p><strong>Ki :</strong> {{ .Character.Ki }}</p>
+  <p><strong>MaxKi :</strong> {{ .Character.MaxKi }}</p>
+  <p><strong>Affiliation :</strong> {{ .Character.Affiliation }}</p>
+
+  <h2>Description</h2>
+  <p>{{ .Character.Description }}</p>
+
+  <h2>Planète d’origine</h2>
+  <p>{{ .Character.OriginPlanet.Name }}</p>
+
+  {{ if .IsFav }}
+    <a href="/favorites/remove?id={{ .Character.ID }}">💔 Retirer des favoris</a>
+  {{ else }}
+    <a href="/favorites/add?id={{ .Character.ID }}">❤️ Ajouter aux favoris</a>
+  {{ end }}
+
+  <h2>Transformations</h2>
+  {{ if .Character.Transformations }}
+    <ul>
+      {{ range .Character.Transformations }}
+        <li>{{ .Name }} — Ki: {{ .Ki }}</li>
+      {{ end }}
+    </ul>
+  {{ else }}
+    <p>Aucune transformation</p>
+  {{ end }}
+</body>
+</html>

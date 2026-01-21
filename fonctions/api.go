@@ -6,80 +6,151 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
+	"sort"
+	"strconv"
 	"strings"
+	"sync"
 )
 
 var Data interface{}
 
-func ApiGet(url string, filters []string) {
-	baseURL := "https://dragonball-api.com/api/"
-	fullURL := baseURL + url
+var nonDigits = regexp.MustCompile(`[^0-9]`)
 
-	resp, err := http.Get(fullURL)
-	if err != nil {
-		fmt.Println("Erreur HTTP :", err)
-		return
-	}
-	defer resp.Body.Close()
+var (
+	charactersCache []struct_.CharacterById
+	cacheMu         sync.RWMutex
+)
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println("Erreur lecture body :", err)
-		return
-	}
+func ApiGet() ([]struct_.CharacterById, error) {
+	var all []struct_.CharacterById
+	page := 1
+	limit := 50
 
-	// Personnage par ID
-	if strings.HasPrefix(url, "characters/") {
-		var character struct_.CharacterById
-		if err := json.Unmarshal(body, &character); err != nil {
-			fmt.Println("Erreur JSON character :", err)
-			return
+	for {
+		url := fmt.Sprintf("characters?page=%d&limit=%d", page, limit)
+
+		baseURL := "https://dragonball-api.com/api/"
+		fullURL := baseURL + url
+
+		resp, err := http.Get(fullURL)
+		if err != nil {
+			return nil, err
 		}
-		Data = character
-		return
+		body, err := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			return nil, err
+		}
+
+		// La réponse attendue ressemble à: { "items": [...] }
+		var parsed struct_.Characters
+		if err := json.Unmarshal(body, &parsed); err != nil {
+			return nil, err
+		}
+
+		if len(parsed.Items) == 0 {
+			break
+		}
+
+		all = append(all, parsed.Items...)
+		page++
 	}
 
-	// Liste personnages
-	if url == "characters" {
-		var characters struct_.Characters
-		if err := json.Unmarshal(body, &characters); err != nil {
-			fmt.Println("Erreur JSON characters :", err)
-			return
-		}
-		Data = characters.Items
-		return
-	}
+	return all, nil
 }
 
 func ApiSearchCharacters(name, race, affiliation string) []struct_.CharacterById {
-
-	ApiGet("characters", nil)
-
-	all, ok := Data.([]struct_.CharacterById)
-	if !ok {
-		return nil
-	}
-
-	var results []struct_.CharacterById
+	cacheMu.RLock()
+	all := charactersCache
+	cacheMu.RUnlock()
 
 	name = strings.ToLower(strings.TrimSpace(name))
 
+	var results []struct_.CharacterById
 	for _, c := range all {
-
 		if name != "" && !strings.Contains(strings.ToLower(c.Name), name) {
 			continue
 		}
-
 		if race != "" && c.Race != race {
 			continue
 		}
-
 		if affiliation != "" && c.Affiliation != affiliation {
 			continue
 		}
-
 		results = append(results, c)
 	}
-
 	return results
+}
+
+func LoadCharactersCache() error {
+	all, err := ApiGet()
+	if err != nil {
+		return err
+	}
+
+	cacheMu.Lock()
+	charactersCache = all
+	cacheMu.Unlock()
+
+	fmt.Println("Cache chargé :", len(all), "personnages")
+	return nil
+}
+
+// Retourne une COPIE du cache (pratique pour éviter qu’on modifie la slice globale)
+func GetCharactersCached() []struct_.CharacterById {
+	cacheMu.RLock()
+	defer cacheMu.RUnlock()
+
+	out := make([]struct_.CharacterById, len(charactersCache))
+	copy(out, charactersCache)
+	return out
+}
+
+func GetCharacterByID(id int) (struct_.CharacterById, bool) {
+	cacheMu.RLock()
+	defer cacheMu.RUnlock()
+
+	for _, c := range charactersCache {
+		if c.ID == id {
+			return c, true
+		}
+	}
+	return struct_.CharacterById{}, false
+}
+
+func kiToInt(s string) int {
+	// "60.000.000" / "unknown" -> int
+	cleaned := nonDigits.ReplaceAllString(s, "")
+	if cleaned == "" {
+		return 0
+	}
+	n, err := strconv.Atoi(cleaned)
+	if err != nil {
+		return 0
+	}
+	return n
+}
+
+func SortCharacters(chars []struct_.CharacterById, sortBy, order string) {
+	desc := (order == "desc")
+
+	sort.Slice(chars, func(i, j int) bool {
+		a, b := chars[i], chars[j]
+
+		var less bool
+		switch sortBy {
+		case "ki":
+			less = kiToInt(a.Ki) < kiToInt(b.Ki)
+		case "maxKi":
+			less = kiToInt(a.MaxKi) < kiToInt(b.MaxKi)
+		default: // "name"
+			less = strings.ToLower(a.Name) < strings.ToLower(b.Name)
+		}
+
+		if desc {
+			return !less
+		}
+		return less
+	})
 }

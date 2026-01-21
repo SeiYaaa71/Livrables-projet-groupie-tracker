@@ -52,20 +52,32 @@ type Planets struct {
 }
 
 type SearchPageData struct {
-    ThemeClass string
-    ThemeParam string
-    Query      string
-    Results    []CharacterById
+	ThemeClass string
+	ThemeParam string
+	Query      string
+	Results    []CharacterById
 }
-
 
 type SearchResultsData struct {
 	Query       string
 	Race        string
 	Affiliation string
-	Results     []CharacterById
-}
 
+	Sort  string
+	Order string
+
+	Page       int
+	PageSize   int
+	Total      int
+	TotalPages int
+	PrevPage   int
+	NextPage   int
+	HasPrev    bool
+	HasNext    bool
+
+	Favorites map[int]bool
+	Results   []CharacterById
+}
 
 var Filters = [][]string{
 	{"race", "Human", "Saiyan", "Namekian", "Majin", "Frieza Race", "Android", "Jiren Race", "God", "Angel", "Evil", "Nucleico", "Nucleico benigno", "Unknown"},

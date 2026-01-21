@@ -3,6 +3,7 @@ package controller
 import (
 	fonction "Livrable-projet-groupie-tracker/fonctions"
 	struct_ "Livrable-projet-groupie-tracker/struct"
+	"bytes"
 	"encoding/json"
 	"html/template"
 	"net/http"
@@ -25,7 +26,16 @@ func renderTemplate(w http.ResponseWriter, filename string, data interface{}) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	tmpl.Execute(w, data)
+
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(buf.Bytes())
 }
 
 // Charger favoris
@@ -54,9 +64,35 @@ func saveFavorites(fav []int) {
 
 // Page d’accueil
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	fonction.ApiGet("characters", []string{})
+	characters := fonction.ApiSearchCharacters("", "", "")
+	renderTemplate(w, "index.html", characters)
+}
 
-	renderTemplate(w, "index.html", fonction.Data)
+func CharactersHandler(w http.ResponseWriter, r *http.Request) {
+	characters := fonction.ApiSearchCharacters("", "", "")
+	renderTemplate(w, "characters.html", characters)
+}
+
+func CharacterDetailHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil || id < 1 {
+		http.Error(w, "ID invalide", http.StatusBadRequest)
+		return
+	}
+
+	c, ok := fonction.GetCharacterByID(id)
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+
+	favIDs := loadFavorites()
+	data := map[string]interface{}{
+		"Character": c,
+		"IsFav":     favoritesToMap(favIDs)[id],
+	}
+
+	renderTemplate(w, "character_detail.html", data)
 }
 
 // Page dashboard
@@ -81,25 +117,6 @@ func FilterPage(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "search.html", nil)
 }
 
-// Page recherche avancée
-func SearchHandler(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	race := r.URL.Query().Get("race")
-	affiliation := r.URL.Query().Get("affiliation")
-
-	results := fonction.ApiSearchCharacters(name, race, affiliation)
-
-	data := struct_.SearchResultsData{
-		Query:       name,
-		Race:        race,
-		Affiliation: affiliation,
-		Results:     results,
-	}
-
-	renderTemplate(w, "RealSearch.html", data)
-}
-
-
 //
 // ========================
 // FAVORIS
@@ -108,32 +125,35 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 
 // Ajouter un favori
 func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
-	idStr := r.URL.Query().Get("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil || id < 1 {
 		http.Error(w, "ID invalide", http.StatusBadRequest)
 		return
 	}
 
 	fav := loadFavorites()
+	for _, v := range fav {
+		if v == id {
+			http.Redirect(w, r, r.Referer(), http.StatusSeeOther)
+			return
+		}
+	}
+
 	fav = append(fav, id)
 	saveFavorites(fav)
 
-	w.Write([]byte("Ajouté aux favoris"))
+	http.Redirect(w, r, r.Referer(), http.StatusSeeOther)
 }
 
-// Supprimer un favori
 func RemoveFavoriteHandler(w http.ResponseWriter, r *http.Request) {
-	idStr := r.URL.Query().Get("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil || id < 1 {
 		http.Error(w, "ID invalide", http.StatusBadRequest)
 		return
 	}
 
 	fav := loadFavorites()
 	newFav := []int{}
-
 	for _, v := range fav {
 		if v != id {
 			newFav = append(newFav, v)
@@ -141,11 +161,5 @@ func RemoveFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	saveFavorites(newFav)
-	w.Write([]byte("Supprimé des favoris"))
-}
-
-func CharactersHandler(w http.ResponseWriter, r *http.Request) {
-	fonction.ApiGet("characters", []string{})
-
-	renderTemplate(w, "characters.html", fonction.Data)
+	http.Redirect(w, r, r.Referer(), http.StatusSeeOther)
 }

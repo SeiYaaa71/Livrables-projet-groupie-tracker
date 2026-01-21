@@ -1,36 +1,72 @@
-<link rel="stylesheet" href="/style/search.css">
+        <!doctype html>
+        <html lang="fr">
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/style/search.css">
+        <title>Recherche</title>
+        </head>
+        <body>
 
-<h1 class="title">Recherche de personnages</h1>
+        <h1 class="title">Recherche de personnages</h1>
 
-<form class="search-form" method="GET" action="/search">
-  <input type="text" name="name" placeholder="Nom..." value="{{ .Query }}">
+        <form class="search-form" method="GET" action="/search">
+            <input type="text" name="name" placeholder="Nom..." value="{{ .Query }}">
 
-  <select name="race">
-    <option value="">-- Race --</option>
-    <option value="Saiyan" {{if eq .Race "Saiyan"}}selected{{end}}>Saiyan</option>
-    <option value="Human" {{if eq .Race "Human"}}selected{{end}}>Human</option>
-    <option value="Namekian" {{if eq .Race "Namekian"}}selected{{end}}>Namekian</option>
-  </select>
+            <select name="race">
+            <option value="">-- Race --</option>
+            <option value="Saiyan" {{if eq .Race "Saiyan"}}selected{{end}}>Saiyan</option>
+            <option value="Human" {{if eq .Race "Human"}}selected{{end}}>Human</option>
+            <option value="Namekian" {{if eq .Race "Namekian"}}selected{{end}}>Namekian</option>
+            </select>
 
-  <select name="affiliation">
-    <option value="">-- Affiliation --</option>
-    <option value="Z Fighter" {{if eq .Affiliation "Z Fighter"}}selected{{end}}>Z Fighter</option>
-    <option value="Army of Frieza" {{if eq .Affiliation "Army of Frieza"}}selected{{end}}>Army of Frieza</option>
-  </select>
+            <select name="affiliation">
+            <option value="">-- Affiliation --</option>
+            <option value="Z Fighter" {{if eq .Affiliation "Z Fighter"}}selected{{end}}>Z Fighter</option>
+            <option value="Army of Frieza" {{if eq .Affiliation "Army of Frieza"}}selected{{end}}>Army of Frieza</option>
+            </select>
 
-  <button type="submit">Rechercher</button>
-</form>
+            <button type="submit">Rechercher</button>
+        </form>
 
-<div class="results">
-  {{ if .Results }}
-    {{ range .Results }}
-      <div class="card">
-        <img src="{{ .Image }}" alt="{{ .Name }}">
-        <h2>{{ .Name }}</h2>
-        <p>{{ .Race }} — {{ .Affiliation }}</p>
-      </div>
+        <div class="results">
+    {{ if .Results }}
+        {{ range .Results }}
+        <div class="card">
+            <a href="/character?id={{ .ID }}" style="text-decoration:none; color:inherit;">
+            <img src="{{ .Image }}" alt="{{ .Name }}">
+            <h2>{{ .Name }}</h2>
+            </a>
+
+            <p>{{ .Race }} — {{ .Affiliation }}</p>
+
+            {{ if index $.Favorites .ID }}
+            <a class="fav-btn" href="/favorites/remove?id={{ .ID }}">💔 Retirer</a>
+            {{ else }}
+            <a class="fav-btn" href="/favorites/add?id={{ .ID }}">❤️ Favori</a>
+            {{ end }}
+        </div>
+        {{ end }}
+    {{ else }}
+        <p style="text-align:center;">Aucun résultat</p>
     {{ end }}
-  {{ else }}
-    <p style="text-align:center;">Aucun résultat</p>
-  {{ end }}
-</div>
+    </div>
+        <div class="pagination">
+        {{ if .HasPrev }}
+            <a href="/search?name={{.Query}}&race={{.Race}}&affiliation={{.Affiliation}}&sort={{.Sort}}&order={{.Order}}&page={{.PrevPage}}&pageSize={{.PageSize}}">
+            ⬅ Précédent
+            </a>
+        {{ end }}
+
+        <span>Page {{ .Page }} / {{ .TotalPages }} ({{ .Total }} résultats)</span>
+
+        {{ if .HasNext }}
+            <a href="/search?name={{.Query}}&race={{.Race}}&affiliation={{.Affiliation}}&sort={{.Sort}}&order={{.Order}}&page={{.NextPage}}&pageSize={{.PageSize}}">
+            Suivant ➡
+            </a>
+        {{ end }}
+        </div>
+
+
+        </body>
+        </html>
