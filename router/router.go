@@ -10,15 +10,23 @@ func New() *http.ServeMux {
 
 	// Pages
 	mux.HandleFunc("/", controller.HomeHandler)
-	mux.HandleFunc("/search", controller.SearchHandler)
 	mux.HandleFunc("/dashboard", controller.DashboardHandler)
+
+	mux.HandleFunc("/search", controller.SearchHandler)
 	mux.HandleFunc("/characters", controller.CharactersHandler)
+	mux.HandleFunc("/character", controller.CharacterDetailHandler)
+
+	// Favoris
 	mux.HandleFunc("/favorites/add", controller.AddFavoriteHandler)
 	mux.HandleFunc("/favorites/remove", controller.RemoveFavoriteHandler)
 
-	// Statics
-	fileServer := http.FileServer(http.Dir("./style"))
-	mux.Handle("/style/", http.StripPrefix("/style/", fileServer))
+	// Statics: CSS
+	styleServer := http.FileServer(http.Dir("./style"))
+	mux.Handle("/style/", http.StripPrefix("/style/", styleServer))
+
+	// Statics: assets (images)
+	assetsServer := http.FileServer(http.Dir("./templates/assets"))
+	mux.Handle("/assets/", http.StripPrefix("/assets/", assetsServer))
 
 	return mux
 }

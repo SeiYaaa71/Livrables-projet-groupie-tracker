@@ -15,7 +15,7 @@
   font-family: 'Roboto', 'Arial', sans-serif;
 }
 
-body {
+body.theme-classic {
   background-color: var(--color-background-light);
   color: var(--color-text-dark);
   line-height: 1.6;

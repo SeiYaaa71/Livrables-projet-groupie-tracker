@@ -1,83 +1,86 @@
-/* RESET SIMPLE */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
+/* =========================
+   SEARCH.CSS (CLASSIC ONLY)
+   S'applique UNIQUEMENT si <body class="theme-classic">
+   ========================= */
+
+/* Reset léger, limité au thème classique */
+body.theme-classic *{
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* TITRE */
-.title {
-    text-align: center;
-    margin: 30px 0;
-    font-size: 32px;
+body.theme-classic .title{
+  text-align: center;
+  margin: 30px 0;
+  font-size: 32px;
 }
 
 /* FORMULAIRE */
-.search-form {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 30px;
+body.theme-classic .search-form{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
 }
 
-.search-form input,
-.search-form select,
-.search-form button {
-    padding: 8px 12px;
-    font-size: 14px;
+body.theme-classic .search-form input,
+body.theme-classic .search-form select,
+body.theme-classic .search-form button{
+  padding: 8px 12px;
+  font-size: 14px;
 }
 
-.search-form button {
-    background-color: #ff9800;
-    border: none;
-    color: white;
-    cursor: pointer;
+body.theme-classic .search-form button{
+  background-color: #ff9800;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
 
-.search-form button:hover {
-    background-color: #e68900;
+body.theme-classic .search-form button:hover{
+  background-color: #e68900;
 }
 
 /* RÉSULTATS */
-.results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 25px;
-    padding: 0 40px 40px;
+body.theme-classic .results{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+  padding: 0 40px 40px;
 }
 
 /* CARD PERSONNAGE */
-.card {
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+body.theme-classic .card{
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
 }
 
-.card:hover {
-    transform: translateY(-5px);
+body.theme-classic .card:hover{
+  transform: translateY(-5px);
 }
 
-.card img {
-    width: 150px;
-    height: auto;
-    margin-bottom: 10px;
+body.theme-classic .card img{
+  width: 150px;
+  height: auto;
+  margin-bottom: 10px;
 }
 
-.card h2 {
-    font-size: 18px;
-    margin-bottom: 5px;
+body.theme-classic .card h2{
+  font-size: 18px;
+  margin-bottom: 5px;
 }
 
-.card p {
-    font-size: 14px;
-    color: #555;
+body.theme-classic .card p{
+  font-size: 14px;
+  color: #555;
 }
 
-.fav-btn{
+body.theme-classic .fav-btn{
   display:inline-block;
   margin-top:10px;
   padding:6px 10px;
@@ -88,17 +91,18 @@
   font-size:13px;
 }
 
-.pagination{
+/* Pagination */
+body.theme-classic .pagination{
   display:flex;
   justify-content:center;
   align-items:center;
   gap:12px;
   padding:20px;
 }
-.pagination a{
+
+body.theme-classic .pagination a{
   text-decoration:none;
   padding:6px 10px;
   border:1px solid #ccc;
   border-radius:8px;
 }
-

@@ -59,25 +59,39 @@ type SearchPageData struct {
 }
 
 type SearchResultsData struct {
-	Query       string
-	Race        string
-	Affiliation string
+  Query       string
+  Race        string
+  Affiliation string
 
-	Sort  string
-	Order string
+  ThemeClass string
+  ThemeParam string
 
-	Page       int
-	PageSize   int
-	Total      int
-	TotalPages int
-	PrevPage   int
-	NextPage   int
-	HasPrev    bool
-	HasNext    bool
+  Sort  string
+  Order string
+
+  Page       int
+  PageSize   int
+  Total      int
+  TotalPages int
+
+  HasPrev  bool
+  HasNext  bool
+  PrevPage int
+  NextPage int
+
+  Favorites map[int]bool
+  Results   []CharacterById
+}
+
+type FavoritesPageData struct {
+	ThemeClass string
+	ThemeParam string
 
 	Favorites map[int]bool
 	Results   []CharacterById
+	Total     int
 }
+
 
 var Filters = [][]string{
 	{"race", "Human", "Saiyan", "Namekian", "Majin", "Frieza Race", "Android", "Jiren Race", "God", "Angel", "Evil", "Nucleico", "Nucleico benigno", "Unknown"},

@@ -1,91 +1,102 @@
-        <!doctype html>
-        <html lang="fr">
-        <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/style/search.css">
-        <title>Recherche</title>
-        </head>
-        <body>
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/style/search.css">
+  <title>Recherche</title>
+</head>
 
-        <h1 class="title">Recherche de personnages</h1>
+<body class="{{.ThemeClass}}">
 
-        <form class="search-form" method="GET" action="/search">
-            <input type="text" name="name" placeholder="Nom..." value="{{ .Query }}">
+  <h1 class="title">Recherche de personnages</h1>
 
-            <select name="race">
-            <option value="">-- Race --</option>
-            <option value="Saiyan" {{if eq .Race "Saiyan"}}selected{{end}}>Saiyan</option>
-            <option value="Human" {{if eq .Race "Human"}}selected{{end}}>Human</option>
-            <option value="Namekian" {{if eq .Race "Namekian"}}selected{{end}}>Namekian</option>
-            <option value="Majin" {{if eq .Race "Majin"}}selected{{end}}>Majin</option>
-            <option value="Frieza Race" {{if eq .Race "Frieza Race"}}selected{{end}}>Frieza Race</option>
-            <option value="Android" {{if eq .Race "Android"}}selected{{end}}>Android</option>
-            <option value="Jiren Race" {{if eq .Race "Jiren Race"}}selected{{end}}>Jiren Race</option>
-            <option value="God" {{if eq .Race "God"}}selected{{end}}>God</option>
-            <option value="Angel" {{if eq .Race "Angel"}}selected{{end}}>Angel</option>
-            <option value="Evil" {{if eq .Race "Evil"}}selected{{end}}>Evil</option>
-            <option value="Nucleico" {{if eq .Race "Nucleico"}}selected{{end}}>Nucleico</option>
-            <option value="Nucleico benigno" {{if eq .Race "Nucleico benigno"}}selected{{end}}>Nucleico benigno</option>
-            <option value="Unknown" {{if eq .Race "Unknown"}}selected{{end}}>Unknown</option>
-            </select>
+  <form class="search-form" method="GET" action="/search">
+    <input type="text" name="name" placeholder="Nom..." value="{{ .Query }}">
 
-            <select name="affiliation">
-            <option value="">-- Affiliation --</option>
-            <option value="Z Fighter" {{if eq .Affiliation "Z Fighter"}}selected{{end}}>Z Fighter</option>
-            <option value="Army of Frieza" {{if eq .Affiliation "Army of Frieza"}}selected{{end}}>Army of Frieza</option>
-            <option value="Villain" {{if eq .Affiliation "Villain"}}selected{{end}}>Villain</option>
-            <option value="Freelancer" {{if eq .Affiliation "Freelancer"}}selected{{end}}>Freelancer</option>
-            <option value="Pride Troopers" {{if eq .Affiliation "Pride Troopers"}}selected{{end}}>Pride Troopers</option>
-            <option value="Assistant of Vermoud" {{if eq .Affiliation "Assistant of Vermoud"}}selected{{end}}>Assistant of Vermoud</option>
-            <option value="Other" {{if eq .Affiliation "Other"}}selected{{end}}>Other</option>
-            </select>
+    <select name="race">
+      <option value="">-- Race --</option>
+      <option value="Saiyan" {{if eq .Race "Saiyan"}}selected{{end}}>Saiyan</option>
+      <option value="Human" {{if eq .Race "Human"}}selected{{end}}>Human</option>
+      <option value="Namekian" {{if eq .Race "Namekian"}}selected{{end}}>Namekian</option>
+      <option value="Majin" {{if eq .Race "Majin"}}selected{{end}}>Majin</option>
+      <option value="Frieza Race" {{if eq .Race "Frieza Race"}}selected{{end}}>Frieza Race</option>
+      <option value="Android" {{if eq .Race "Android"}}selected{{end}}>Android</option>
+      <option value="Jiren Race" {{if eq .Race "Jiren Race"}}selected{{end}}>Jiren Race</option>
+      <option value="God" {{if eq .Race "God"}}selected{{end}}>God</option>
+      <option value="Angel" {{if eq .Race "Angel"}}selected{{end}}>Angel</option>
+      <option value="Evil" {{if eq .Race "Evil"}}selected{{end}}>Evil</option>
+      <option value="Nucleico" {{if eq .Race "Nucleico"}}selected{{end}}>Nucleico</option>
+      <option value="Nucleico benigno" {{if eq .Race "Nucleico benigno"}}selected{{end}}>Nucleico benigno</option>
+      <option value="Unknown" {{if eq .Race "Unknown"}}selected{{end}}>Unknown</option>
+    </select>
 
-            <button type="submit">Rechercher</button>
-        </form>
+    <select name="affiliation">
+      <option value="">-- Affiliation --</option>
+      <option value="Z Fighter" {{if eq .Affiliation "Z Fighter"}}selected{{end}}>Z Fighter</option>
+      <option value="Army of Frieza" {{if eq .Affiliation "Army of Frieza"}}selected{{end}}>Army of Frieza</option>
+      <option value="Villain" {{if eq .Affiliation "Villain"}}selected{{end}}>Villain</option>
+      <option value="Freelancer" {{if eq .Affiliation "Freelancer"}}selected{{end}}>Freelancer</option>
+      <option value="Pride Troopers" {{if eq .Affiliation "Pride Troopers"}}selected{{end}}>Pride Troopers</option>
+      <option value="Assistant of Vermoud" {{if eq .Affiliation "Assistant of Vermoud"}}selected{{end}}>Assistant of Vermoud</option>
+      <option value="Other" {{if eq .Affiliation "Other"}}selected{{end}}>Other</option>
+    </select>
 
-        <div class="results">
+    <!-- garder le thème -->
+    {{ if .ThemeParam }}
+      <input type="hidden" name="theme" value="ui">
+    {{ end }}
+
+    <input type="hidden" name="sort" value="{{.Sort}}">
+    <input type="hidden" name="order" value="{{.Order}}">
+
+    <button type="submit">Rechercher</button>
+  </form>
+
+  <div class="results">
     {{ if .Results }}
-        {{ range .Results }}
+      {{ range .Results }}
         <div class="card">
-            <a href="/character?id={{ .ID }}" style="text-decoration:none; color:inherit;">
+
+          <a href="/character?id={{ .ID }}{{if $.ThemeParam}}&{{$.ThemeParam}}{{end}}" style="text-decoration:none; color:inherit;">
             <img src="{{ .Image }}" alt="{{ .Name }}">
             <h2>{{ .Name }}</h2>
-            </a>
+          </a>
 
-            <p>{{ .Race }} — {{ .Affiliation }}</p>
+          <p>{{ .Race }} — {{ .Affiliation }}</p>
 
-            {{ if index $.Favorites .ID }}
-            <a class="fav-btn" href="/favorites/remove?id={{ .ID }}">
-                <img src="assets/Dragonball.jpg">
+          {{ if index $.Favorites .ID }}
+            <a class="fav-btn" href="/favorites/remove?id={{ .ID }}{{if $.ThemeParam}}&{{$.ThemeParam}}{{end}}" title="Retirer des favoris">
+              <img src="/assets/DragonBall.jpg" alt="Favori" width="32" height="32">
             </a>
-            {{ else }}
-            <a class="fav-btn" href="/favorites/add?id={{ .ID }}">
-                <img src="assets/UsedDragonBall.jpg">
+          {{ else }}
+            <a class="fav-btn" href="/favorites/add?id={{ .ID }}{{if $.ThemeParam}}&{{$.ThemeParam}}{{end}}" title="Ajouter aux favoris">
+              <img src="/assets/UsedDragonball.jpg" alt="Ajouter" width="32" height="32">
             </a>
-            {{ end }}
+          {{ end }}
+
         </div>
-        {{ end }}
+      {{ end }}
     {{ else }}
-        <p style="text-align:center;">Aucun résultat</p>
+      <p style="text-align:center;">Aucun résultat</p>
     {{ end }}
-    </div>
-        <div class="pagination">
-        {{ if .HasPrev }}
-            <a href="/search?name={{.Query}}&race={{.Race}}&affiliation={{.Affiliation}}&sort={{.Sort}}&order={{.Order}}&page={{.PrevPage}}&pageSize={{.PageSize}}">
-            ⬅ Précédent
-            </a>
-        {{ end }}
+  </div>
 
-        <span>Page {{ .Page }} / {{ .TotalPages }} ({{ .Total }} résultats)</span>
+  <div class="pagination">
+    {{ if .HasPrev }}
+      <a href="/search?name={{.Query}}&race={{.Race}}&affiliation={{.Affiliation}}&sort={{.Sort}}&order={{.Order}}&page={{.PrevPage}}&pageSize={{.PageSize}}{{if .ThemeParam}}&{{.ThemeParam}}{{end}}">
+        ⬅ Précédent
+      </a>
+    {{ end }}
 
-        {{ if .HasNext }}
-            <a href="/search?name={{.Query}}&race={{.Race}}&affiliation={{.Affiliation}}&sort={{.Sort}}&order={{.Order}}&page={{.NextPage}}&pageSize={{.PageSize}}">
-            Suivant ➡
-            </a>
-        {{ end }}
-        </div>
+    <span>Page {{ .Page }} / {{ .TotalPages }} ({{ .Total }} résultats)</span>
 
+    {{ if .HasNext }}
+      <a href="/search?name={{.Query}}&race={{.Race}}&affiliation={{.Affiliation}}&sort={{.Sort}}&order={{.Order}}&page={{.NextPage}}&pageSize={{.PageSize}}{{if .ThemeParam}}&{{.ThemeParam}}{{end}}">
+        Suivant ➡
+      </a>
+    {{ end }}
+  </div>
 
-        </body>
-        </html>
+</body>
+</html>
