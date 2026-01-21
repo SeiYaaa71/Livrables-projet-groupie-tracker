@@ -8,17 +8,28 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var favoritesFile = "favorites.json"
 
-// fonction pour charger les pages html
+//
+// ========================
+// UTILS
+// ========================
+//
+
+// Render template centralisé
 func renderTemplate(w http.ResponseWriter, filename string, data interface{}) {
-	tmpl := template.Must(template.ParseFiles("template/" + filename))
+	tmpl, err := template.ParseFiles("templates/" + filename)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	tmpl.Execute(w, data)
 }
 
-// Charger favoris depuis JSON
+// Charger favoris
 func loadFavorites() []int {
 	data, err := os.ReadFile(favoritesFile)
 	if err != nil {
@@ -30,10 +41,29 @@ func loadFavorites() []int {
 	return fav
 }
 
+// Sauvegarder favoris
+func saveFavorites(fav []int) {
+	data, _ := json.Marshal(fav)
+	os.WriteFile(favoritesFile, data, 0644)
+}
+
+//
+// ========================
+// HANDLERS PAGES
+// ========================
+//
+
+// Page d’accueil
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	fonction.ApiGet("characters", []string{})
+
+	renderTemplate(w, "index.html", fonction.Data)
+}
+
+// Page dashboard
 func DashboardHandler(w http.ResponseWriter, r *http.Request) {
 	theme := r.URL.Query().Get("theme")
 
-	// Utilisation de struct_.SearchPageData
 	data := struct_.SearchPageData{
 		ThemeClass: "",
 		ThemeParam: "",
@@ -44,58 +74,46 @@ func DashboardHandler(w http.ResponseWriter, r *http.Request) {
 		data.ThemeParam = "?theme=ui"
 	}
 
-	tmpl, err := template.ParseFiles("templates/dashboard.html")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	tmpl.Execute(w, data)
+	renderTemplate(w, "dashboard.html", data)
 }
 
-// Sauvegarder favoris
-func saveFavorites(fav []int) {
-	data, _ := json.Marshal(fav)
-	os.WriteFile(favoritesFile, data, 0644)
-}
-
-// Page d’accueil
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, _ := template.ParseFiles("templates/index.html")
-	tmpl.Execute(w, nil)
-	fonction.ApiGet("characters", []string{})
-	data := fonction.Data
-	renderTemplate(w, "index.html", data)
-}
-
+// Page recherche simple
 func FilterPage(w http.ResponseWriter, r *http.Request) {
-	tmpl, _ := template.ParseFiles("templates/search.html")
-	tmpl.Execute(w, nil)
-	var detail string = "characters/1"
-	fonction.ApiGet(detail, []string{})
-	data := " "
-	renderTemplate(w, "search.html", data)
+	renderTemplate(w, "search.html", nil)
 }
 
-// Recherche + filtres + pagination
+// Page recherche avancée
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
-	data := make(map[string]interface{})
-	if r.Method == http.MethodGet {
-		Id := r.FormValue("id")
+	name := r.URL.Query().Get("name")
+	race := r.URL.Query().Get("race")
+	affiliation := r.URL.Query().Get("affiliation")
 
-		if Id != " " {
-			fonction.ApiGet("characters/"+Id, []string{})
-			data["character"] = fonction.Data
-		}
+	results := ApiSearchCharacters(name, race, affiliation)
+
+	data := struct_.SearchResultsData{
+		Query:       name,
+		Race:        race,
+		Affiliation: affiliation,
+		Results:     results,
 	}
-	data["Characters"] = nil
-	renderTemplate(w, "RealSearch.html", data)
 
+	renderTemplate(w, "RealSearch.html", data)
 }
+
+//
+// ========================
+// FAVORIS
+// ========================
+//
 
 // Ajouter un favori
 func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Query().Get("id")
-	id, _ := strconv.Atoi(idStr)
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "ID invalide", http.StatusBadRequest)
+		return
+	}
 
 	fav := loadFavorites()
 	fav = append(fav, id)
@@ -107,10 +125,15 @@ func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 // Supprimer un favori
 func RemoveFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Query().Get("id")
-	id, _ := strconv.Atoi(idStr)
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "ID invalide", http.StatusBadRequest)
+		return
+	}
 
 	fav := loadFavorites()
 	newFav := []int{}
+
 	for _, v := range fav {
 		if v != id {
 			newFav = append(newFav, v)
@@ -119,4 +142,10 @@ func RemoveFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 
 	saveFavorites(newFav)
 	w.Write([]byte("Supprimé des favoris"))
+}
+
+func CharactersHandler(w http.ResponseWriter, r *http.Request) {
+	fonction.ApiGet("characters", []string{})
+
+	renderTemplate(w, "characters.html", fonction.Data)
 }

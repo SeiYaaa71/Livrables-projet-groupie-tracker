@@ -1,69 +1,52 @@
 package fonction
 
 import (
-	"Livrable-projet-groupie-tracker/struct"
+	struct_ "Livrable-projet-groupie-tracker/struct"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 )
 
 var Data interface{}
-var DecodeChar struct_.CharacterById
-var DecodePlan struct_.Planets
 
-func ApiGet(Url string, filters []string) {
+func ApiGet(url string, filters []string) {
+	baseURL := "https://dragonball-api.com/api/"
+	fullURL := baseURL + url
 
-	UrlApi := "https://dragonball-api.com/api/"
-
-	if Url != "" {
-		UrlApi += Url
+	resp, err := http.Get(fullURL)
+	if err != nil {
+		fmt.Println("Erreur HTTP :", err)
+		return
 	}
+	defer resp.Body.Close()
 
-	// Création de la requête
-	req, errReq := http.NewRequest(http.MethodGet, UrlApi, nil)
-	if errReq != nil {
-		fmt.Println("Erreur création requête :", errReq.Error())
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Erreur lecture body :", err)
 		return
 	}
 
-	client := &http.Client{}
-	res, errResp := client.Do(req)
-	if errResp != nil {
-		fmt.Println("Erreur lors de l'appel API :", errResp.Error())
-		return
-	}
-	defer res.Body.Close()
-
-	// Lecture du corps de la réponse
-	body, errBody := io.ReadAll(res.Body)
-	if errBody != nil {
-		fmt.Println("Erreur lecture body :", errBody.Error())
-		return
-	}
-
-	fmt.Println("Réponse brute :")
-	fmt.Println(string(body))
-
-	// Décodage JSON
-
-	if Url == "characters/1" {
-		errJson := json.Unmarshal(body, &DecodeChar)
-		if errJson != nil {
-			fmt.Println("Erreur lors du décodage JSON :", errJson.Error())
-			fmt.Println("Contenu reçu :", string(body))
+	// Personnage par ID
+	if strings.HasPrefix(url, "characters/") {
+		var character struct_.CharacterById
+		if err := json.Unmarshal(body, &character); err != nil {
+			fmt.Println("Erreur JSON character :", err)
 			return
 		}
+		Data = character
+		return
+	}
 
-		Data = &DecodeChar
-	} else {
-		errJson := json.Unmarshal(body, &DecodePlan)
-		if errJson != nil {
-			fmt.Println("Erreur lors du décodage JSON :", errJson.Error())
-			fmt.Println("Contenu reçu :", string(body))
+	// Liste personnages
+	if url == "characters" {
+		var characters struct_.Characters
+		if err := json.Unmarshal(body, &characters); err != nil {
+			fmt.Println("Erreur JSON characters :", err)
 			return
 		}
-
-		Data = &DecodePlan
+		Data = characters.Items
+		return
 	}
 }

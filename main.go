@@ -1,18 +1,18 @@
 package main
 
 import (
-	router "Livrable-projet-groupie-tracker/router"
-	"fmt"
+	"log"
 	"net/http"
+
+	"Livrable-projet-groupie-tracker/router"
 )
 
 func main() {
-	r := router.New()
+	mux := router.New()
 
-	fileServer := http.FileServer(http.Dir("./template"))
-
-	r.Handle("/template/", http.StripPrefix("/template/", fileServer))
-
-	fmt.Println("serveur démare sur http://localhost:8080")
-	http.ListenAndServe(":8080", r)
+	log.Println("Serveur lancé sur http://localhost:8080")
+	err := http.ListenAndServe(":8080", mux)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
