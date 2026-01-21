@@ -50,3 +50,36 @@ func ApiGet(url string, filters []string) {
 		return
 	}
 }
+
+func ApiSearchCharacters(name, race, affiliation string) []struct_.CharacterById {
+
+	ApiGet("characters", nil)
+
+	all, ok := Data.([]struct_.CharacterById)
+	if !ok {
+		return nil
+	}
+
+	var results []struct_.CharacterById
+
+	name = strings.ToLower(strings.TrimSpace(name))
+
+	for _, c := range all {
+
+		if name != "" && !strings.Contains(strings.ToLower(c.Name), name) {
+			continue
+		}
+
+		if race != "" && c.Race != race {
+			continue
+		}
+
+		if affiliation != "" && c.Affiliation != affiliation {
+			continue
+		}
+
+		results = append(results, c)
+	}
+
+	return results
+}

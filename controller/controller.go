@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 )
 
 var favoritesFile = "favorites.json"
@@ -88,7 +87,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	race := r.URL.Query().Get("race")
 	affiliation := r.URL.Query().Get("affiliation")
 
-	results := ApiSearchCharacters(name, race, affiliation)
+	results := fonction.ApiSearchCharacters(name, race, affiliation)
 
 	data := struct_.SearchResultsData{
 		Query:       name,
@@ -99,6 +98,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 
 	renderTemplate(w, "RealSearch.html", data)
 }
+
 
 //
 // ========================
