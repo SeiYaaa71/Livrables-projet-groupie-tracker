@@ -18,12 +18,27 @@
             <option value="Saiyan" {{if eq .Race "Saiyan"}}selected{{end}}>Saiyan</option>
             <option value="Human" {{if eq .Race "Human"}}selected{{end}}>Human</option>
             <option value="Namekian" {{if eq .Race "Namekian"}}selected{{end}}>Namekian</option>
+            <option value="Majin" {{if eq .Race "Majin"}}selected{{end}}>Majin</option>
+            <option value="Frieza Race" {{if eq .Race "Frieza Race"}}selected{{end}}>Frieza Race</option>
+            <option value="Android" {{if eq .Race "Android"}}selected{{end}}>Android</option>
+            <option value="Jiren Race" {{if eq .Race "Jiren Race"}}selected{{end}}>Jiren Race</option>
+            <option value="God" {{if eq .Race "God"}}selected{{end}}>God</option>
+            <option value="Angel" {{if eq .Race "Angel"}}selected{{end}}>Angel</option>
+            <option value="Evil" {{if eq .Race "Evil"}}selected{{end}}>Evil</option>
+            <option value="Nucleico" {{if eq .Race "Nucleico"}}selected{{end}}>Nucleico</option>
+            <option value="Nucleico benigno" {{if eq .Race "Nucleico benigno"}}selected{{end}}>Nucleico benigno</option>
+            <option value="Unknown" {{if eq .Race "Unknown"}}selected{{end}}>Unknown</option>
             </select>
 
             <select name="affiliation">
             <option value="">-- Affiliation --</option>
             <option value="Z Fighter" {{if eq .Affiliation "Z Fighter"}}selected{{end}}>Z Fighter</option>
             <option value="Army of Frieza" {{if eq .Affiliation "Army of Frieza"}}selected{{end}}>Army of Frieza</option>
+            <option value="Villain" {{if eq .Affiliation "Villain"}}selected{{end}}>Villain</option>
+            <option value="Freelancer" {{if eq .Affiliation "Freelancer"}}selected{{end}}>Freelancer</option>
+            <option value="Pride Troopers" {{if eq .Affiliation "Pride Troopers"}}selected{{end}}>Pride Troopers</option>
+            <option value="Assistant of Vermoud" {{if eq .Affiliation "Assistant of Vermoud"}}selected{{end}}>Assistant of Vermoud</option>
+            <option value="Other" {{if eq .Affiliation "Other"}}selected{{end}}>Other</option>
             </select>
 
             <button type="submit">Rechercher</button>
@@ -41,9 +56,13 @@
             <p>{{ .Race }} — {{ .Affiliation }}</p>
 
             {{ if index $.Favorites .ID }}
-            <a class="fav-btn" href="/favorites/remove?id={{ .ID }}">💔 Retirer</a>
+            <a class="fav-btn" href="/favorites/remove?id={{ .ID }}">
+                <img src="assets/Dragonball.jpg">
+            </a>
             {{ else }}
-            <a class="fav-btn" href="/favorites/add?id={{ .ID }}">❤️ Favori</a>
+            <a class="fav-btn" href="/favorites/add?id={{ .ID }}">
+                <img src="assets/UsedDragonBall.jpg">
+            </a>
             {{ end }}
         </div>
         {{ end }}
