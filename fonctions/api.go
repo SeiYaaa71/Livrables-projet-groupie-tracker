@@ -108,15 +108,38 @@ func GetCharactersCached() []struct_.CharacterById {
 }
 
 func GetCharacterByID(id int) (struct_.CharacterById, bool) {
-	cacheMu.RLock()
-	defer cacheMu.RUnlock()
-
-	for _, c := range charactersCache {
-		if c.ID == id {
-			return c, true
-		}
+	if id < 1 {
+		return struct_.CharacterById{}, false
 	}
-	return struct_.CharacterById{}, false
+
+	url := fmt.Sprintf("https://dragonball-api.com/api/characters/%d", id)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return struct_.CharacterById{}, false
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return struct_.CharacterById{}, false
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return struct_.CharacterById{}, false
+	}
+
+	var c struct_.CharacterById
+	if err := json.Unmarshal(body, &c); err != nil {
+		return struct_.CharacterById{}, false
+	}
+
+	// sécurité: si l’API renvoie un objet sans ID
+	if c.ID < 1 {
+		return struct_.CharacterById{}, false
+	}
+
+	return c, true
 }
 
 func kiToInt(s string) int {

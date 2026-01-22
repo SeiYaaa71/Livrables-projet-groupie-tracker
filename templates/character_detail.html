@@ -10,13 +10,17 @@
   <link rel="stylesheet" href="/style/theme-ui.css">
 
   <style>
-    .detail-wrap{ max-width: 1000px; margin:0 auto; padding: 22px 16px 40px; }
+    /* Layout global comme les autres pages */
+    .page-wrap{ max-width: 1200px; margin:0 auto; padding: 22px 16px 40px; }
+    .page-title{ text-align:center; margin: 8px 0 16px; font-size: 28px; font-weight: 900; }
+
     .detail{
       display:grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: 360px 1fr;
       gap: 16px;
       align-items:start;
     }
+
     .panel{
       background: var(--panel);
       border: 1px solid var(--border);
@@ -24,11 +28,96 @@
       box-shadow: var(--shadow);
       padding: 16px;
     }
-    .hero-img{ width:100%; height: 360px; object-fit: contain; display:block; }
-    .kvs{ display:grid; gap: 8px; margin-top: 10px; color: var(--muted); font-size: 14px; }
-    .title{ margin: 0 0 6px; font-weight: 900; font-size: 26px; }
-    .desc{ color: var(--muted); line-height: 1.5; }
-    @media (max-width: 860px){
+
+    .hero-img{
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      display:block;
+      margin: 0 auto 10px;
+    }
+
+    .title{
+      margin: 0 0 6px;
+      font-weight: 900;
+      font-size: 26px;
+    }
+
+    .desc{
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Infos "table" */
+    .info-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .kv{
+      display:flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+    }
+    .kv strong{ color: var(--muted); font-weight: 900; }
+    .kv span{ text-align:right; overflow-wrap:anywhere; }
+
+    /* Transformations */
+    .section-title{
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .t-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .t-card{
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+      text-align:center;
+      box-shadow: var(--shadow);
+    }
+
+    .t-img{
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      display:block;
+      margin: 0 auto 8px;
+    }
+
+    .t-name{
+      font-weight: 900;
+      margin: 4px 0 2px;
+    }
+
+    .t-meta{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .muted{
+      color: var(--muted);
+      margin: 0;
+    }
+
+    @media (max-width: 960px){
       .detail{ grid-template-columns: 1fr; }
       .hero-img{ height: 320px; }
     }
@@ -36,52 +125,103 @@
 </head>
 
 <body class="{{.ThemeClass}}">
-  <header class="main-header">
-    <div class="header-spacer"></div>
-    <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
-    <nav class="top-nav">
-      <a class="btn btn-small" href="/search{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Retour recherche</a>
-      <a class="btn btn-small" href="/favorites{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Favoris</a>
-    </nav>
-  </header>
+<header class="main-header">
+  <div class="header-spacer"></div>
+  <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
+  <nav class="top-nav">
+    <a class="btn btn-small" href="/dashboard{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Dashboard</a>
+    <a class="btn btn-small" href="/search{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Recherche</a>
+    <a class="btn btn-small" href="/favorites{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Favoris</a>
+    <a class="btn btn-small" href="/characters{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Encyclopédie</a>
+  </nav>
+</header>
 
-  <main class="detail-wrap">
-    <div class="detail">
-      <aside class="panel">
-        <img class="hero-img" src="{{.Character.Image}}" alt="{{.Character.Name}}">
-        <div class="kvs">
-          <div><strong>Race:</strong> {{.Character.Race}}</div>
-          <div><strong>Affiliation:</strong> {{.Character.Affiliation}}</div>
-          <div><strong>Ki:</strong> {{.Character.Ki}}</div>
-          <div><strong>Max Ki:</strong> {{.Character.MaxKi}}</div>
-        </div>
+<main class="page-wrap">
+  <div class="page-title">Détails du personnage</div>
 
-        <div style="display:flex; justify-content:center; margin-top: 12px;">
-          {{ if .IsFav }}
-            <a class="btn btn-small" href="/favorites/remove?id={{.Character.ID}}{{if .ThemeParam}}&{{.ThemeParam}}{{end}}">Retirer des favoris</a>
-          {{ else }}
-            <a class="btn btn-small" href="/favorites/add?id={{.Character.ID}}{{if .ThemeParam}}&{{.ThemeParam}}{{end}}">Ajouter aux favoris</a>
-          {{ end }}
-        </div>
-      </aside>
+  <section class="detail">
+    <!-- Colonne gauche (visuel + actions) -->
+    <aside class="panel">
+      <img class="hero-img" src="{{.Character.Image}}" alt="{{.Character.Name}}">
 
+      <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+        {{ if .IsFav }}
+        <a class="btn btn-small" href="/favorites/remove?id={{.Character.ID}}{{if .ThemeParam}}&{{.ThemeParam}}{{end}}">
+          Retirer des favoris
+        </a>
+        {{ else }}
+        <a class="btn btn-small" href="/favorites/add?id={{.Character.ID}}{{if .ThemeParam}}&{{.ThemeParam}}{{end}}">
+          Ajouter aux favoris
+        </a>
+        {{ end }}
+        <a class="btn btn-small" href="/search{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Retour recherche</a>
+      </div>
+
+      <div class="info-grid">
+        <div class="kv"><strong>Nom</strong><span>{{.Character.Name}}</span></div>
+        <div class="kv"><strong>Genre</strong><span>{{.Character.Gender}}</span></div>
+        <div class="kv"><strong>Race</strong><span>{{.Character.Race}}</span></div>
+        <div class="kv"><strong>Affiliation</strong><span>{{.Character.Affiliation}}</span></div>
+        <div class="kv"><strong>Ki</strong><span>{{.Character.Ki}}</span></div>
+        <div class="kv"><strong>Max Ki</strong><span>{{.Character.MaxKi}}</span></div>
+      </div>
+    </aside>
+
+    <!-- Colonne droite (description + planète + transformations) -->
+    <div style="display:grid; gap:16px;">
       <section class="panel">
         <h2 class="title">{{.Character.Name}}</h2>
         <p class="desc">{{.Character.Description}}</p>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">Planète d’origine</div>
 
         {{ if .Character.OriginPlanet.Name }}
-          <hr style="border:none; border-top:1px solid var(--border); margin: 14px 0;">
-          <h3 style="margin:0 0 6px;">Planète d’origine</h3>
-          <p class="desc" style="margin:0;">
-            <strong>{{.Character.OriginPlanet.Name}}</strong> — {{.Character.OriginPlanet.Description}}
-          </p>
+        <div class="info-grid" style="margin-top:0;">
+          <div class="kv"><strong>Nom</strong><span>{{.Character.OriginPlanet.Name}}</span></div>
+          <div class="kv"><strong>Détruite</strong><span>{{if .Character.OriginPlanet.IsDestroyed}}Oui{{else}}Non{{end}}</span></div>
+          {{ if .Character.OriginPlanet.Description }}
+          <div class="kv" style="align-items:flex-start;">
+            <strong>Description</strong>
+            <span>{{.Character.OriginPlanet.Description}}</span>
+          </div>
+          {{ end }}
+        </div>
+        {{ else }}
+        <p class="muted">Aucune information de planète disponible.</p>
+        {{ end }}
+      </section>
+
+      <section class="panel">
+        <div class="section-title">Transformations</div>
+
+        {{ if .Character.Transformations }}
+        <div class="t-grid">
+          {{ range .Character.Transformations }}
+          <article class="t-card">
+            {{ if .Image }}
+            <img class="t-img" src="{{.Image}}" alt="{{.Name}}">
+            {{ else }}
+            <div class="t-img" style="display:grid; place-items:center; border:1px dashed var(--border); border-radius: 12px;">
+              <span class="muted">Pas d’image</span>
+            </div>
+            {{ end }}
+            <div class="t-name">{{.Name}}</div>
+            <p class="t-meta">Ki: {{.Ki}}</p>
+          </article>
+          {{ end }}
+        </div>
+        {{ else }}
+        <p class="muted">Pas de transformation.</p>
         {{ end }}
       </section>
     </div>
-  </main>
+  </section>
+</main>
 
-  <footer>
-    <small>Dragon Ball API Search — 2026</small>
-  </footer>
+<footer>
+  <small>Dragon Ball API Search — 2026</small>
+</footer>
 </body>
 </html>

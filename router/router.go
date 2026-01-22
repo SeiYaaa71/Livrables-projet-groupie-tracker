@@ -16,6 +16,7 @@ func New() *http.ServeMux {
 	mux.HandleFunc("/characters", controller.CharactersHandler)
 	mux.HandleFunc("/character", controller.CharacterDetailHandler)
 
+	mux.HandleFunc("/favorites", controller.FavoritesPageHandler)
 	// Favoris
 	mux.HandleFunc("/favorites/add", controller.AddFavoriteHandler)
 	mux.HandleFunc("/favorites/remove", controller.RemoveFavoriteHandler)

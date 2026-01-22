@@ -137,11 +137,11 @@
             <div class="fav-row">
               {{ if index $.Favorites .ID }}
                 <a class="fav-btn" href="/favorites/remove?id={{.ID}}{{if $.ThemeParam}}&{{$.ThemeParam}}{{end}}">
-                  <img src="/assets/UsedDragonBall.png" alt="Retirer des favoris">
+                  <img src="/assets/DragonBall.png" alt="Retirer des favoris">
                 </a>
               {{ else }}
                 <a class="fav-btn" href="/favorites/add?id={{.ID}}{{if $.ThemeParam}}&{{$.ThemeParam}}{{end}}">
-                  <img src="/assets/DragonBall.png" alt="Ajouter aux favoris">
+                  <img src="/assets/UsedDragonBall.png" alt="Ajouter aux favoris">
                 </a>
               {{ end }}
             </div>

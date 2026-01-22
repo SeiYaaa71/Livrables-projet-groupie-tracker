@@ -75,24 +75,26 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CharactersHandler(w http.ResponseWriter, r *http.Request) {
-  themeClass, themeParam := ResolveTheme(r)
+	themeClass, themeParam := ResolveTheme(r)
 
-  items := fonction.GetCharactersCached() // []CharacterById
+	items := fonction.GetCharactersCached() // []CharacterById
 
-  data := struct {
-    ThemeClass string
-    ThemeParam string
-    Items      []struct_.CharacterById
-  }{
-    ThemeClass: themeClass,
-    ThemeParam: themeParam,
-    Items:      items,
-  }
+	data := struct {
+		ThemeClass string
+		ThemeParam string
+		Items      []struct_.CharacterById
+	}{
+		ThemeClass: themeClass,
+		ThemeParam: themeParam,
+		Items:      items,
+	}
 
-  renderTemplate(w, "characters.html", data)
+	renderTemplate(w, "characters.html", data)
 }
 
 func CharacterDetailHandler(w http.ResponseWriter, r *http.Request) {
+	themeClass, themeParam := ResolveTheme(r)
+
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
 		http.Error(w, "ID invalide", http.StatusBadRequest)
@@ -107,8 +109,10 @@ func CharacterDetailHandler(w http.ResponseWriter, r *http.Request) {
 
 	favIDs := loadFavorites()
 	data := map[string]interface{}{
-		"Character": c,
-		"IsFav":     favoritesToMap(favIDs)[id],
+		"ThemeClass": themeClass,
+		"ThemeParam": themeParam,
+		"Character":  c,
+		"IsFav":      favoritesToMap(favIDs)[id],
 	}
 
 	renderTemplate(w, "character_detail.html", data)
@@ -116,7 +120,7 @@ func CharacterDetailHandler(w http.ResponseWriter, r *http.Request) {
 
 // Page dashboard
 func DashboardHandler(w http.ResponseWriter, r *http.Request) {
-
+	PersistThemeCookie(w, r)
 	themeClass, themeParam := ResolveTheme(r)
 
 	data := struct_.SearchPageData{

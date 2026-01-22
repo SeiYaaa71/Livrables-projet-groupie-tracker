@@ -10,37 +10,36 @@
   <link rel="stylesheet" href="/style/theme-ui.css">
 </head>
 
-<body class="theme-classic">
-  <header class="main-header">
-    <div class="header-spacer"></div>
-    <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
-    <nav class="top-nav">
-      <a class="btn btn-small" href="/dashboard">Dashboard</a>
-    </nav>
-  </header>
+<body class="{{.ThemeClass}}">
+<header class="main-header">
+  <div class="header-spacer"></div>
+  <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
+  <nav class="top-nav">
+    <a class="btn btn-small" href="/dashboard{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Dashboard</a>
+  </nav>
+</header>
 
-  <main class="homepage-splash">
-    <div class="container" style="max-width: 820px;">
-      <h2 style="text-align:center; margin:0 0 10px;">Découvrez les Guerriers de l'Univers</h2>
-      <p style="text-align:center; margin:0 auto 18px; max-width: 680px;">
-        Recherchez des personnages, filtrez par race / affiliation, ajoutez des favoris et consultez une fiche détaillée.
-      </p>
+<main class="homepage-splash">
+  <div class="container" style="max-width: 820px;">
+    <h2 style="text-align:center; margin:0 0 10px;">Découvrez les Guerriers de l'Univers</h2>
+    <p style="text-align:center; margin:0 auto 18px; max-width: 680px;">
+      Recherchez des personnages, filtrez par race / affiliation, ajoutez des favoris et consultez une fiche détaillée.
+    </p>
 
-      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top: 10px;">
-        <a class="btn btn-large" href="/dashboard">Style Classique</a>
-        <a class="btn btn-large" href="/dashboard?theme=ui">Mode Ultra Instinct</a>
-      </div>
-
-      <div style="display:flex; gap:10px; justify-content:center; margin-top:18px; flex-wrap:wrap;">
-        <a class="btn btn-small" href="/search">Recherche rapide</a>
-        <a class="btn btn-small" href="/search?theme=ui">Recherche UI</a>
-        <a class="btn btn-small" href="/favorites">Favoris</a>
-      </div>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top: 10px;">
+      <a class="btn btn-large" href="/dashboard?theme=classic">Style Classique</a>
+      <a class="btn btn-large" href="/dashboard?theme=ui">Mode Ultra Instinct</a>
     </div>
-  </main>
 
-  <footer>
-    <small>Dragon Ball API Search — 2026</small>
-  </footer>
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:18px; flex-wrap:wrap;">
+      <a class="btn btn-small" href="/search{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Recherche</a>
+      <a class="btn btn-small" href="/favorites{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Favoris</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <small>Dragon Ball API Search — 2026</small>
+</footer>
 </body>
 </html>
