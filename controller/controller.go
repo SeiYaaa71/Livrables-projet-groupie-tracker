@@ -64,13 +64,32 @@ func saveFavorites(fav []int) {
 
 // Page d’accueil
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	characters := fonction.ApiSearchCharacters("", "", "")
-	renderTemplate(w, "index.html", characters)
+	themeClass, themeParam := ResolveTheme(r)
+
+	data := struct_.HomePageData{
+		ThemeClass: themeClass,
+		ThemeParam: themeParam,
+	}
+
+	renderTemplate(w, "index.html", data)
 }
 
 func CharactersHandler(w http.ResponseWriter, r *http.Request) {
-	characters := fonction.ApiSearchCharacters("", "", "")
-	renderTemplate(w, "characters.html", characters)
+  themeClass, themeParam := ResolveTheme(r)
+
+  items := fonction.GetCharactersCached() // []CharacterById
+
+  data := struct {
+    ThemeClass string
+    ThemeParam string
+    Items      []struct_.CharacterById
+  }{
+    ThemeClass: themeClass,
+    ThemeParam: themeParam,
+    Items:      items,
+  }
+
+  renderTemplate(w, "characters.html", data)
 }
 
 func CharacterDetailHandler(w http.ResponseWriter, r *http.Request) {
@@ -97,16 +116,12 @@ func CharacterDetailHandler(w http.ResponseWriter, r *http.Request) {
 
 // Page dashboard
 func DashboardHandler(w http.ResponseWriter, r *http.Request) {
-	theme := r.URL.Query().Get("theme")
+
+	themeClass, themeParam := ResolveTheme(r)
 
 	data := struct_.SearchPageData{
-		ThemeClass: "",
-		ThemeParam: "",
-	}
-
-	if theme == "ui" {
-		data.ThemeClass = "ui-theme"
-		data.ThemeParam = "?theme=ui"
+		ThemeClass: themeClass,
+		ThemeParam: themeParam,
 	}
 
 	renderTemplate(w, "dashboard.html", data)

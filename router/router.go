@@ -24,7 +24,7 @@ func New() *http.ServeMux {
 	styleServer := http.FileServer(http.Dir("./style"))
 	mux.Handle("/style/", http.StripPrefix("/style/", styleServer))
 
-	// Statics: assets (images)
+	// Assets (images)
 	assetsServer := http.FileServer(http.Dir("./templates/assets"))
 	mux.Handle("/assets/", http.StripPrefix("/assets/", assetsServer))
 

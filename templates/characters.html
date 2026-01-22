@@ -1,25 +1,200 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CSS neutre + thèmes -->
+  <link rel="stylesheet" href="/style/base.css">
+  <link rel="stylesheet" href="/style/theme-classic.css">
+  <link rel="stylesheet" href="/style/theme-ui.css">
+
+  <title>Encyclopédie - Dragon Ball Z Encyclopedia</title>
+
+  <style>
+    /* ====== Page-specific (scopée par thème) ====== */
+
+    /* Titre de page */
+    body.theme-classic .page-title,
+    body.theme-ui .page-title{
+      text-align: center;
+      margin: 26px 0 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    body.theme-classic .page-title{ color: #1e1e1e; }
+    body.theme-ui .page-title{
+      color: #18c7d8;
+      text-shadow: 0 0 14px rgba(24,199,216,.35), 0 0 32px rgba(43,130,255,.20);
+    }
+
+    /* Barre d’actions */
+    .page-actions{
+      max-width: 1200px;
+      margin: 0 auto 16px;
+      padding: 0 18px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    body.theme-ui .page-actions .btn{
+      background: rgba(255,255,255,.05);
+      color: #eaf2ff;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    /* Grid */
+    .grid{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 18px 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    /* Card */
+    .char-card{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform .18s ease, box-shadow .22s ease, border-color .22s ease;
+      position: relative;
+    }
+
+    .char-card:hover{
+      transform: translateY(-6px);
+      border-color: rgba(24,199,216,.25);
+      box-shadow: var(--hover-shadow);
+    }
+
+    /* Image normée */
+    .char-thumb{
+      width: 100%;
+      height: 260px;          /* hauteur fixe */
+      display: grid;
+      place-items: center;
+      background: rgba(0,0,0,.06);
+    }
+
+    body.theme-ui .char-thumb{
+      background: rgba(0,0,0,.22);
+    }
+
+    .char-thumb img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;     /* IMPORTANT: pas de géant, garde proportions */
+      padding: 12px;
+    }
+
+    /* Contenu */
+    .char-body{
+      padding: 12px 14px 14px;
+      text-align: center;
+    }
+
+    .char-name{
+      margin: 6px 0 4px;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .3px;
+    }
+
+    .char-meta{
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    /* Badge */
+    .badge{
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    body.theme-classic .badge{
+      background: rgba(0,0,0,.03);
+    }
+
+    /* Empty state */
+    .empty{
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 18px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 700;
+    }
+  </style>
 </head>
+
 <body class="{{.ThemeClass}}">
-    <div class="CharacterSheets"></div>
-    {{range .Items}}
-        
-    
-        {{if .Image}}
-            <img src="{{ (index .Image 0).Url }}" alt="image de {{.NomAlb}}">
-        {{end}}
 
-        <h3>{{.Name}}</h3>
-        <div class="Description">
-            <p>Race : {{.Race}}</p>
-            <p>Affiliation : {{.Affiliation}}</p>
-        </div>
+  <header class="main-header">
+    <div class="header-spacer"></div>
 
-    {{end}}
+    <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
+
+    <nav class="top-nav">
+      <a href="/characters{{if .ThemeParam}}?{{.ThemeParam}}{{end}}" class="btn btn-small">Encyclopédie</a>
+      <a href="/search{{if .ThemeParam}}?{{.ThemeParam}}{{end}}" class="btn btn-small">Recherche</a>
+      <a href="/favorites{{if .ThemeParam}}?{{.ThemeParam}}{{end}}" class="btn btn-small">Favoris</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2 class="page-title">Encyclopédie</h2>
+
+    <div class="page-actions">
+      <a class="btn btn-small" href="/dashboard{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Retour Dashboard</a>
+      <a class="btn btn-small" href="/search{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Aller à la recherche</a>
+    </div>
+
+    {{ if .Items }}
+      <section class="grid">
+        {{ range .Items }}
+          <article class="char-card">
+            <a href="/character?id={{.ID}}{{if $.ThemeParam}}&{{$.ThemeParam}}{{end}}">
+              <div class="char-thumb">
+                <img src="{{.Image}}" alt="{{.Name}}">
+              </div>
+              <div class="char-body">
+                <div class="char-name">{{.Name}}</div>
+                <p class="char-meta">{{.Race}} — {{.Affiliation}}</p>
+                <div class="badge">Voir détails</div>
+              </div>
+            </a>
+          </article>
+        {{ end }}
+      </section>
+    {{ else }}
+      <p class="empty">Aucun personnage disponible.</p>
+    {{ end }}
+  </main>
+
+  <footer>
+    <small>Dragon Ball API Search V2.0 - 2025</small>
+  </footer>
+
 </body>
 </html>

@@ -84,6 +84,7 @@ type SearchResultsData struct {
 }
 
 type FavoritesPageData struct {
+
 	ThemeClass string
 	ThemeParam string
 
@@ -92,6 +93,16 @@ type FavoritesPageData struct {
 	Total     int
 }
 
+type HomePageData struct {
+	ThemeClass string
+	ThemeParam string
+}
+
+type CharactersPageData struct {
+	ThemeClass string
+	ThemeParam string
+	Characters []CharacterById
+}
 
 var Filters = [][]string{
 	{"race", "Human", "Saiyan", "Namekian", "Majin", "Frieza Race", "Android", "Jiren Race", "God", "Angel", "Evil", "Nucleico", "Nucleico benigno", "Unknown"},

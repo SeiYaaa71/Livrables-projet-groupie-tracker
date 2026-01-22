@@ -8,13 +8,7 @@ import (
 
 func FavoritesPageHandler(w http.ResponseWriter, r *http.Request) {
 	// thème
-	theme := r.URL.Query().Get("theme")
-	themeClass := "theme-classic"
-	themeParam := ""
-	if theme == "ui" {
-		themeClass = "theme-ui"
-		themeParam = "theme=ui"
-	}
+	themeClass, themeParam := ResolveTheme(r)
 
 	// favoris -> map
 	favIDs := loadFavorites()

@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Accueil - Dragon Ball Search</title>
-    <link rel="stylesheet" href="/style/main.css">
-<link rel="stylesheet" href="/style/layout.css">
-<link rel="stylesheet" href="/style/components.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dragon Ball Z Encyclopedia</title>
 
-<link rel="stylesheet" href="/style/ultra-instinct.css">
+  <link rel="stylesheet" href="/style/base.css">
+  <link rel="stylesheet" href="/style/theme-classic.css">
+  <link rel="stylesheet" href="/style/theme-ui.css">
 </head>
-<body class="theme-classic"> 
-    
-    <header>
-        <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
-    </header>
 
-    <main class="homepage-splash">
-        <h2>Découvrez les Guerriers de l'Univers</h2>
-        <p>
-            Plongez dans les données de tous les personnages, races et sagas de l'univers Dragon Ball. Choisissez votre mode de combat.
-        </p>
-        
-        <div style="display: flex; gap: 20px;">
-             <a href="/dashboard" class="btn btn-large">ACCÉDER (STYLE CLASSIQUE)</a>
+<body class="theme-classic">
+  <header class="main-header">
+    <div class="header-spacer"></div>
+    <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
+    <nav class="top-nav">
+      <a class="btn btn-small" href="/dashboard">Dashboard</a>
+    </nav>
+  </header>
 
-        <a href="/dashboard?theme=ui" class="btn btn-large" style="background: linear-gradient(135deg, #00bcd4, #00838f); color: #fff;">
-        MODE ULTRA INSTINCT
-    </a>
-</div>
-    </main>
+  <main class="homepage-splash">
+    <div class="container" style="max-width: 820px;">
+      <h2 style="text-align:center; margin:0 0 10px;">Découvrez les Guerriers de l'Univers</h2>
+      <p style="text-align:center; margin:0 auto 18px; max-width: 680px;">
+        Recherchez des personnages, filtrez par race / affiliation, ajoutez des favoris et consultez une fiche détaillée.
+      </p>
 
-    <footer>
-        <small>Dragon Ball API Search V2.0 - 2025</small>
-    </footer>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top: 10px;">
+        <a class="btn btn-large" href="/dashboard">Style Classique</a>
+        <a class="btn btn-large" href="/dashboard?theme=ui">Mode Ultra Instinct</a>
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:center; margin-top:18px; flex-wrap:wrap;">
+        <a class="btn btn-small" href="/search">Recherche rapide</a>
+        <a class="btn btn-small" href="/search?theme=ui">Recherche UI</a>
+        <a class="btn btn-small" href="/favorites">Favoris</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <small>Dragon Ball API Search — 2026</small>
+  </footer>
 </body>
 </html>

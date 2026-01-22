@@ -1,0 +1,96 @@
+/* =========================
+   THEME-UI.CSS (ULTRA INSTINCT)
+   S'applique uniquement si body.theme-ui
+   ========================= */
+
+body.theme-ui{
+  --bg: #05060a;
+  --text: #eaf2ff;
+  --muted: rgba(234,242,255,.72);
+
+  --panel: rgba(15,19,32,.92);
+  --input-bg: rgba(0,0,0,.25);
+
+  --accent: #18c7d8;
+  --border: rgba(255,255,255,.10);
+
+  --header-bg: rgba(5,6,10,.72);
+  --header-text: #eaf2ff;
+
+  --btn-bg: linear-gradient(135deg, #18c7d8, #2b82ff);
+  --btn-text: #041217;
+  --btn-border: transparent;
+
+  --focus: rgba(24,199,216,.14);
+
+  --shadow: 0 18px 45px rgba(0,0,0,.45);
+  --hover-shadow:
+    0 18px 45px rgba(0,0,0,.55),
+    0 0 28px rgba(24,199,216,.18),
+    0 0 40px rgba(43,130,255,.12);
+
+  --footer-bg: rgba(5,6,10,.65);
+}
+
+/* Background UI (aura) */
+body.theme-ui{
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(43,130,255,.25), transparent 60%),
+    radial-gradient(900px 500px at 55% 10%, rgba(24,199,216,.18), transparent 55%),
+    radial-gradient(900px 700px at 10% 90%, rgba(24,199,216,.10), transparent 55%),
+    linear-gradient(180deg, #05060a, #0b0d14) !important;
+}
+
+/* Header title glow */
+body.theme-ui .main-header h1{
+  color: #18c7d8;
+  text-shadow:
+    0 0 14px rgba(24,199,216,.35),
+    0 0 32px rgba(43,130,255,.20);
+}
+
+/* Container aura + animation */
+body.theme-ui .container::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background: linear-gradient(90deg, transparent, rgba(24,199,216,.22), transparent);
+  transform: translateX(-60%);
+  filter: blur(10px);
+  opacity:.75;
+  animation: uiAura 5s ease-in-out infinite;
+  pointer-events:none;
+}
+
+@keyframes uiAura{
+  0%{transform:translateX(-60%)}
+  50%{transform:translateX(60%)}
+  100%{transform:translateX(-60%)}
+}
+
+/* Inputs UI */
+body.theme-ui input[type="text"],
+body.theme-ui input[type="number"],
+body.theme-ui select{
+  border-color: rgba(255,255,255,.12);
+}
+
+body.theme-ui input:focus,
+body.theme-ui select:focus{
+  border-color: rgba(24,199,216,.55);
+  box-shadow: 0 0 0 4px rgba(24,199,216,.12);
+}
+
+/* Boutons nav : version "glass" (pas le gros gradient) */
+body.theme-ui .top-nav .btn{
+  background: rgba(255,255,255,.05);
+  color: #eaf2ff;
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+/* Bouton principal submit : gradient */
+body.theme-ui button.btn{
+  background: linear-gradient(135deg, #18c7d8, #2b82ff);
+  color: #041217;
+  border: none;
+}

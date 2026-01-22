@@ -67,13 +67,7 @@ func sortCharacters(chars []struct_.CharacterById, sortBy, order string) {
 // /search : recherche par nom + filtres + tri + pagination + favoris
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
 
-	theme := r.URL.Query().Get("theme")
-	themeClass := "theme-classic"
-	themeParam := ""
-	if theme == "ui" {
-		themeClass = "theme-ui"
-		themeParam = "theme=ui"
-	}
+	themeClass, themeParam := ResolveTheme(r)
 
 	// Filtres
 	name := r.URL.Query().Get("name")

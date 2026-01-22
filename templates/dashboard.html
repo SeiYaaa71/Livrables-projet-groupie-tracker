@@ -1,53 +1,50 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard</title>
 
-  <link rel="stylesheet" href="/style/main.css">
-  <link rel="stylesheet" href="/style/layout.css">
-  <link rel="stylesheet" href="/style/components.css">
-  <link rel="stylesheet" href="/style/ultra-instinct.css">
-
-  <title>Dashboard - Dragon Ball Encyclopedia</title>
+  <link rel="stylesheet" href="/style/base.css">
+  <link rel="stylesheet" href="/style/theme-classic.css">
+  <link rel="stylesheet" href="/style/theme-ui.css">
 </head>
 
 <body class="{{.ThemeClass}}">
-
   <header class="main-header">
     <div class="header-spacer"></div>
-
     <h1>DRAGON BALL Z ENCYCLOPEDIA</h1>
-
     <nav class="top-nav">
-      <a href="/characters{{if .ThemeParam}}?{{.ThemeParam}}{{end}}" class="btn btn-small">Encyclopédie</a>
-      <a href="/search{{if .ThemeParam}}?{{.ThemeParam}}{{end}}" class="btn btn-small">Recherche</a>
-      <a href="/favorites{{if .ThemeParam}}?{{.ThemeParam}}{{end}}" class="btn btn-small">Favoris</a>
+      <a class="btn btn-small" href="/characters{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Encyclopédie</a>
+      <a class="btn btn-small" href="/search{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Recherche</a>
+      <a class="btn btn-small" href="/favorites{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Favoris</a>
     </nav>
   </header>
 
   <main class="homepage-splash">
-    <div class="container" style="max-width: 500px;">
-      <form action="/search" method="GET">
+    <div class="container" style="max-width: 520px;">
+      <h2 style="text-align:center; margin:0 0 14px;">Recherche rapide</h2>
 
-        <!-- garder le thème lors de la recherche -->
+      <form action="/search" method="GET" style="display:grid; gap:12px;">
         {{ if .ThemeParam }}
           <input type="hidden" name="theme" value="ui">
         {{ end }}
 
-        <label for="name">Entrez un nom de personnage :</label>
-        <input type="text" id="name" name="name" placeholder="Goku" style="margin-top:10px;">
+        <label for="name">Nom du personnage</label>
+        <input type="text" id="name" name="name" placeholder="Ex: Goku">
 
-        <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">
-          RECHERCHER
-        </button>
+        <button type="submit" class="btn" style="width:100%;">Rechercher</button>
       </form>
+
+      <div style="display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap;">
+        <a class="btn btn-small" href="/search{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Recherche avancée</a>
+        <a class="btn btn-small" href="/characters{{if .ThemeParam}}?{{.ThemeParam}}{{end}}">Voir tous</a>
+      </div>
     </div>
   </main>
 
   <footer>
-    <small>Dragon Ball API Search V2.0 - 2025</small>
+    <small>Dragon Ball API Search — 2026</small>
   </footer>
-
 </body>
 </html>
