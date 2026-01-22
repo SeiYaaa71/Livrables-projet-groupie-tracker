@@ -1,7 +1,9 @@
 /* =========================
-   ULTRA INSTINCT THEME
+   ULTRA INSTINCT THEME (theme-ui)
    ========================= */
-:root{
+
+/* Variables uniquement en theme-ui */
+body.theme-ui{
   --bg0:#07080c;
   --bg1:#0d0f16;
   --panel:#10131c;
@@ -18,13 +20,15 @@
   --radius: 16px;
 }
 
-/* base */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
+/* base (UNIQUEMENT en UI) */
+body.theme-ui *{ box-sizing:border-box; }
+
+html, body{ height:100%; }
+
+body.theme-ui{
   margin:0;
   font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  color:var(--text);
+  color: var(--text);
   background:
     radial-gradient(1200px 600px at 50% -10%, rgba(43,130,255,.25), transparent 60%),
     radial-gradient(900px 500px at 55% 10%, rgba(24,199,216,.18), transparent 55%),
@@ -33,9 +37,9 @@ body{
 }
 
 /* =========================
-   HEADER
+   HEADER (si tu l'utilises)
    ========================= */
-.site-header{
+body.theme-ui .site-header{
   position: sticky;
   top:0;
   z-index:100;
@@ -44,7 +48,7 @@ body{
   border-bottom: 1px solid var(--border);
 }
 
-.header-inner{
+body.theme-ui .header-inner{
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px 18px;
@@ -54,7 +58,7 @@ body{
   gap: 12px;
 }
 
-.header-title{
+body.theme-ui .header-title{
   margin:0;
   text-align:center;
   font-weight: 900;
@@ -69,15 +73,15 @@ body{
   text-overflow: ellipsis;
 }
 
-.header-right{
+body.theme-ui .header-right{
   display:flex;
   justify-content:flex-end;
   align-items:center;
   gap:10px;
 }
 
-/* buttons */
-.btn{
+/* Buttons */
+body.theme-ui .btn{
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -92,15 +96,14 @@ body{
   background: rgba(255,255,255,.04);
   transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .2s ease;
 }
-
-.btn:hover{
+body.theme-ui .btn:hover{
   transform: translateY(-1px);
   background: rgba(255,255,255,.07);
   border-color: rgba(255,255,255,.16);
   box-shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 
-.btn-primary{
+body.theme-ui .btn-primary{
   border: none;
   color: #041217;
   background: linear-gradient(135deg, var(--ui-cyan), var(--ui-blue));
@@ -108,13 +111,9 @@ body{
     0 10px 26px rgba(24,199,216,.20),
     0 0 0 1px rgba(24,199,216,.25) inset;
 }
+body.theme-ui .btn-primary:hover{ filter: brightness(1.05); }
 
-.btn-primary:hover{
-  filter: brightness(1.05);
-}
-
-/* simple link (ex: "Vas au test") */
-.nav-link{
+body.theme-ui .nav-link{
   color: var(--ui-white);
   font-weight: 700;
   text-decoration: none;
@@ -122,22 +121,23 @@ body{
   border-radius: 12px;
   transition: background .15s ease, transform .15s ease;
 }
-.nav-link:hover{
+body.theme-ui .nav-link:hover{
   background: rgba(24,199,216,.10);
   transform: translateY(-1px);
 }
 
 /* =========================
-   MAIN LAYOUT
+   MAIN (dashboard / card form)
    ========================= */
-.main{
+body.theme-ui .main{
   min-height: calc(100vh - 86px);
   display:grid;
   place-items: center;
   padding: 40px 16px 60px;
 }
 
-.card{
+/* Card de FORM (dashboard) */
+body.theme-ui .card{
   width: min(560px, 92vw);
   background:
     radial-gradient(900px 260px at 20% 0%, rgba(24,199,216,.14), transparent 60%),
@@ -150,7 +150,7 @@ body{
   overflow: hidden;
 }
 
-.card::before{
+body.theme-ui .card::before{
   content:"";
   position:absolute;
   inset: -2px;
@@ -167,12 +167,12 @@ body{
   100%{transform:translateX(-60%)}
 }
 
-.card-inner{
+body.theme-ui .card-inner{
   position: relative;
   padding: 26px 26px 22px;
 }
 
-.card-title{
+body.theme-ui .card-title{
   margin: 0 0 14px;
   text-align: center;
   font-weight: 800;
@@ -180,18 +180,15 @@ body{
   letter-spacing: .4px;
 }
 
-.form{
-  display:grid;
-  gap: 14px;
-}
+body.theme-ui .form{ display:grid; gap: 14px; }
 
-.label{
+body.theme-ui .label{
   text-align:center;
   font-weight: 700;
   color: var(--muted);
 }
 
-.input{
+body.theme-ui .input{
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
@@ -201,12 +198,12 @@ body{
   outline: none;
   transition: border-color .15s ease, box-shadow .2s ease;
 }
-.input:focus{
+body.theme-ui .input:focus{
   border-color: rgba(24,199,216,.55);
   box-shadow: 0 0 0 4px rgba(24,199,216,.12);
 }
 
-.btn-submit{
+body.theme-ui .btn-submit{
   margin-top: 6px;
   width: 100%;
   padding: 12px 14px;
@@ -221,13 +218,13 @@ body{
   box-shadow: 0 14px 28px rgba(24,199,216,.18);
   transition: transform .15s ease, filter .15s ease;
 }
-.btn-submit:hover{ transform: translateY(-1px); filter: brightness(1.05); }
-.btn-submit:active{ transform: translateY(0px); }
+body.theme-ui .btn-submit:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+body.theme-ui .btn-submit:active{ transform: translateY(0px); }
 
 /* =========================
    FOOTER
    ========================= */
-.footer{
+body.theme-ui .footer{
   border-top: 1px solid var(--border);
   background: rgba(7,8,12,.65);
   color: var(--muted);
@@ -237,98 +234,12 @@ body{
 }
 
 /* =========================
-   RESPONSIVE
+   SEARCH PAGE (UI)
    ========================= */
-@media (max-width: 820px){
-  .header-inner{
-    grid-template-columns: 1fr;
-    gap: 10px;
-    text-align:center;
-  }
-  .header-right{
-    justify-content:center;
-    flex-wrap: wrap;
-  }
-}
-
-/* =========================
-   ULTRA INSTINCT GLOW (HOVER)
-   ========================= */
-
-/* Glow + lift au hover */
-.card{
-  transition: transform .18s ease, box-shadow .22s ease, border-color .22s ease;
-}
-
-.card:hover{
-  transform: translateY(-6px);
-  border-color: rgba(24,199,216,.38);
-  box-shadow:
-    0 18px 45px rgba(0,0,0,.55),
-    0 0 28px rgba(24,199,216,.18),
-    0 0 40px rgba(43,130,255,.12);
-}
-
-/* Shine animé au hover */
-.card::after{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background: linear-gradient(120deg,
-    transparent 0%,
-    rgba(24,199,216,.10) 35%,
-    rgba(43,130,255,.10) 50%,
-    rgba(24,199,216,.08) 65%,
-    transparent 100%
-  );
-  opacity: 0;
-  transform: translateX(-60%);
-  filter: blur(8px);
-  pointer-events: none;
-}
-
-.card:hover::after{
-  opacity: 1;
-  animation: uiShine 2.8s ease-in-out infinite;
-}
-
-@keyframes uiShine{
-  0%{ transform: translateX(-60%); }
-  50%{ transform: translateX(60%); }
-  100%{ transform: translateX(-60%); }
-}
-
-/* Glow sur l’image du favori (DragonBall) */
-.fav-btn img{
-  border-radius: 999px;
-  box-shadow: 0 0 0 rgba(24,199,216,0);
-  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
-}
-
-.fav-btn:hover img{
-  transform: scale(1.06);
-  filter: brightness(1.05);
-  box-shadow:
-    0 0 18px rgba(24,199,216,.35),
-    0 0 28px rgba(43,130,255,.18);
-}
-
-/* Petit effet focus (clavier) */
-.fav-btn:focus-visible,
-.btn:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(24,199,216,.18);
-  border-radius: 14px;
-}
-
-/* =========================
-   UI SEARCH PAGE (theme-ui)
-   ========================= */
-
 body.theme-ui .title{
   text-align:center;
   margin: 26px 0 18px;
-  font-size: 34px;
+  font-size: clamp(24px, 3vw, 34px);
   font-weight: 900;
   letter-spacing: 1.2px;
   text-transform: uppercase;
@@ -336,7 +247,7 @@ body.theme-ui .title{
   text-shadow: 0 0 16px rgba(24,199,216,.30);
 }
 
-/* Form */
+/* Form search */
 body.theme-ui .search-form{
   display:flex;
   justify-content:center;
@@ -375,78 +286,96 @@ body.theme-ui .search-form button{
   box-shadow: 0 14px 28px rgba(24,199,216,.18);
 }
 
-/* Grid résultats */
+/* Grid résultats: responsive */
 body.theme-ui .results{
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 16px 40px;
   display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 22px;
-  padding: 0 18px 40px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(14px, 2vw, 22px);
 }
 
-/* Card résultat (différente de ta .card "form" si tu l'utilises ailleurs) */
+/* Cards résultats: on NE réutilise pas la width de la "card form" */
 body.theme-ui .results .card{
   width: auto;
+  min-height: 420px;
+  padding: 14px;
+  text-align: center;
+
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+
   background: rgba(16,19,28,.80);
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 16px;
-  padding: 14px;
-  text-align: center;
   box-shadow: 0 14px 35px rgba(0,0,0,.45);
-  display: flex;
+}
+
+/* lien */
+body.theme-ui .results .card a{
+  width: 100%;
+  display:flex;
   flex-direction: column;
   align-items: center;
+  text-decoration:none;
+  color:inherit;
 }
 
-/* Image : limite la taille */
-body.theme-ui .results .card img{
-  width: 100%;
-  max-width: 180px;
-  height: 220px;              /* TAILLE FIXE */
-  object-fit: contain;        /* pas coupée */
-  margin: 6px auto 8px;
-}
+/* Image responsive, normalisée sur tous écrans */
+body.theme-ui .results .card a img{
+  width: clamp(140px, 22vw, 210px);
+  aspect-ratio: 3 / 4;
+  height: auto;
+  object-fit: contain;
+  display:block;
+  margin: 6px auto 10px;
 
-body.theme-ui .results .card img{
-  background:
-    radial-gradient(circle at center,
-      rgba(24,199,216,.25),
-      rgba(0,0,0,0) 70%);
-  border-radius: 12px;
+  background: radial-gradient(circle at center,
+    rgba(24,199,216,.18),
+    rgba(0,0,0,0) 65%);
+  border-radius: 14px;
 }
 
 /* Texte */
 body.theme-ui .results .card h2{
-  margin: 6px 0 4px;
-  font-size: 18px;
+  margin: 4px 0 6px;
+  font-size: clamp(16px, 1.8vw, 18px);
   color: var(--ui-white);
 }
-
 body.theme-ui .results .card p{
   margin: 0;
   font-size: 13px;
   color: rgba(233,243,255,.78);
 }
 
-/* Favori button */
-body.theme-ui .fav-btn{
+/* Favoris (poussé en bas) */
+body.theme-ui .results .card .fav-btn{
+  margin-top: auto;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  margin-top: 10px;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 12px;
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.10);
   text-decoration:none;
 }
-
-body.theme-ui .fav-btn img{
-  width: 34px;
-  height: 34px;
+body.theme-ui .results .card .fav-btn img{
+  width: clamp(28px, 3.5vw, 36px);
+  height: clamp(28px, 3.5vw, 36px);
   object-fit: cover;
   border-radius: 999px;
+  box-shadow: 0 0 0 rgba(24,199,216,0);
+  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+}
+body.theme-ui .results .card .fav-btn:hover img{
+  transform: scale(1.06);
+  filter: brightness(1.05);
+  box-shadow:
+    0 0 18px rgba(24,199,216,.35),
+    0 0 28px rgba(43,130,255,.18);
 }
 
 /* Pagination */
@@ -454,14 +383,14 @@ body.theme-ui .pagination{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:12px;
+  flex-wrap: wrap;
+  gap: 12px;
   padding: 18px 12px 28px;
   color: rgba(233,243,255,.80);
 }
-
 body.theme-ui .pagination a{
   text-decoration:none;
-  padding: 8px 12px;
+  padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.05);
@@ -470,4 +399,84 @@ body.theme-ui .pagination a{
 body.theme-ui .pagination a:hover{
   border-color: rgba(24,199,216,.35);
   box-shadow: 0 0 18px rgba(24,199,216,.18);
+}
+
+/* =========================
+   GLOW HOVER (UNIQUEMENT résultats)
+   ========================= */
+body.theme-ui .results .card{
+  transition: transform .18s ease, box-shadow .22s ease, border-color .22s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+body.theme-ui .results .card::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background: linear-gradient(120deg,
+    transparent 0%,
+    rgba(24,199,216,.10) 35%,
+    rgba(43,130,255,.10) 50%,
+    rgba(24,199,216,.08) 65%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: translateX(-60%);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+body.theme-ui .results .card:hover{
+  transform: translateY(-6px);
+  border-color: rgba(24,199,216,.38);
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.55),
+    0 0 28px rgba(24,199,216,.18),
+    0 0 40px rgba(43,130,255,.12);
+}
+
+body.theme-ui .results .card:hover::after{
+  opacity: 1;
+  animation: uiShine 2.8s ease-in-out infinite;
+}
+
+@keyframes uiShine{
+  0%{ transform: translateX(-60%); }
+  50%{ transform: translateX(60%); }
+  100%{ transform: translateX(-60%); }
+}
+
+/* Focus accessibilité */
+body.theme-ui .fav-btn:focus-visible,
+body.theme-ui .btn:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(24,199,216,.18);
+  border-radius: 14px;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 820px){
+  body.theme-ui .header-inner{
+    grid-template-columns: 1fr;
+    gap: 10px;
+    text-align:center;
+  }
+  body.theme-ui .header-right{
+    justify-content:center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 520px){
+  body.theme-ui .results{
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    padding: 0 10px 30px;
+  }
+  body.theme-ui .results .card{
+    min-height: 380px;
+    padding: 12px;
+  }
 }
